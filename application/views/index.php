@@ -7,13 +7,13 @@
     <h2>我的资料</h2>
     <ul data-role="listview">
       <li><a href="#">我的轮胎<span class="ui-li-count">{wheel}</span></a></li>
-      <li><a href="index/weihulist">我的维护</a></li>
-      <li><a href="index/insurancelist">我的保险</a></li>
+      <li><a href="<?php echo site_url('index/weihulist') ?>">我的维护</a></li>
+      <li><a href="<?php echo site_url('index/insurancelist') ?>">我的保险</a></li>
     </ul>
     <h2>爱车师傅</h2>
     <ul data-role="listview">
-      <li><a href="index/workerlist">师傅预约</a></li>
-      <li><a href="index/workerlist">师傅在线</a></li>
+      <li><a href="<?php echo site_url('index/workerlist') ?>">师傅预约</a></li>
+      <li><a href="<?php echo site_url('index/workerlist') ?>'">师傅在线</a></li>
       <li><a href="#">师傅上门</a></li>
       <li><a href="#">增值服务</a></li>
     </ul>
