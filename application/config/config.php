@@ -14,7 +14,10 @@
 | path to your installation.
 |
 */
-$config['base_url']	= 'http://localhost/ci/';
+$baseUrl = str_replace('\\','/',dirname($_SERVER['SCRIPT_NAME']));
+$baseUrl = trim($baseUrl,'/');
+$config['base_url'] = empty($baseUrl) ? '/' : "/$baseUrl/";
+//$config['base_url']	= 'http://localhost/aichezhijia/';
 
 /*
 |--------------------------------------------------------------------------
