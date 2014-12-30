@@ -8,8 +8,8 @@ class Examples extends CI_Controller {
 
 		$this->load->database();
 		$this->load->helper('url');
-
 		$this->load->library('grocery_CRUD');
+		
 	}
 
 	public function _example_output($output = null)

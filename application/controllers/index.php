@@ -26,6 +26,9 @@ class index extends CI_Controller {
 		$this->load->library('parser');
 		$this->appid = "wx13facdc7a21c75b6";
 		$this->secret = "";
+		
+		$head = $this->load->view("include/head","",true);
+		$this->data['head'] = $head;
 	}
 	
 	private function is_weixin()
@@ -39,27 +42,29 @@ class index extends CI_Controller {
 	
 	public function index()
 	{
-		$data = array('error'=>"");
-		
+		$this->data["error"] = "";
+		//已登录
 		if($this->session->userdata('userid') > 0)
 		{
 			$query = $this->db->query("select * from `user` where id={$this->session->userdata('userid')}");
-			$data['wheel'] = $query->result_array()[0]['wheel'];
-			$this->parser->parse('index',$data);
-			
+			$this->data['wheel'] = $query->result_array()[0]['wheel'];
+			$this->parser->parse('index',$this->data);
 		}else{
+			//微信
 			if(self::is_weixin())
 			{
 				$redirect_uri = "login";
 				redirect("https://open.weixin.qq.com/connect/oauth2/authorize?appid={$appid}&redirect_uri={$redirect_uri}&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect");
 			}else{
-				$this->parser->parse('login',$data);
+				//print_r($this->data);die();
+				$this->parser->parse('login',$this->data);
 			}
 		}
 	}
 	
 	public function login()
 	{
+		//微信登陆
 		if($_REQUEST['code'] != "")
 		{
 			$url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid={$appid}&secret={$secret}&code={$_REQUEST['code']}&grant_type=authorization_code";
@@ -76,11 +81,14 @@ class index extends CI_Controller {
 					$this->session->set_userdata('userid', $query->result_array()[0]['id']);
 					redirect("index");
 				}else{
-					$this->parser->parse('login',array('error'=>"",'weixinID'=>$output['openid']));
+					$this->data['error'] = "";
+					$this->data['weixinID'] = $output['openid'];
+					$this->parser->parse('login',$this->data);
 				}
 			}
 		}
-		$this->parser->parse('login',array('error'=>""));
+		$this->data['error'] = "";
+		$this->parser->parse('login',$this->data);
 	}
 	
 	public function loginpost()
@@ -96,14 +104,15 @@ class index extends CI_Controller {
 			redirect("index");
 		}else{
 			$error = "请输入正确的用户名及密码";
-			$this->parser->parse('login',array('error'=>$error));
+			$this->data['error'] = $error;
+			$this->parser->parse('login',$this->data);
 		}
 	}
 	
 	public function register()
 	{
-		$error = "";
-		$this->parser->parse('register',array('error'=>$error));
+		$this->data['error'] = "";
+		$this->parser->parse('register',$this->data);
 	}
 	
 	public function registerpost()
@@ -117,19 +126,22 @@ class index extends CI_Controller {
 		if($username == "" || $password==""||$password2==""||$phone==""||$carmodel=="")
 		{
 			$error = "请输入完整";
-			$this->parser->parse('register',array('error'=>$error));
+			$this->data['error'] = $error;
+			$this->parser->parse('register',$this->data);
 		}
 		elseif($password != $password2)
 		{
-			$error = "请确认密码是否一致";
-			$this->parser->parse('register',array('error'=>$error));
+			$error = "密码不一致";
+			$this->data['error'] = $error;
+			$this->parser->parse('register',$this->data);
 		}
 		else{
 			$query = $this->db->query("select * from `user` where username='{$username}'");
 			if(count($query->result_array())>0)
 			{
 				$error = "用户名已存在";
-				$this->parser->parse('register',array('error'=>$error));
+				$this->data['error'] = $error;
+				$this->parser->parse('register',$this->data);
 			}else {
 				$query = $this->db->query("insert into `user` (username,password,phone,carmodel) values ('{$username}','{$password}','{$phone}','{$carmodel}')");
 				redirect('index/login');
@@ -145,7 +157,8 @@ class index extends CI_Controller {
 	
 	public function insurancelist(){
 		$records = $this->db->query("select * from insurance where userid={$this->session->userdata('userid')}");
-		$this->parser->parse('insurancelist',array('records'=>$records->result_array()));
+		$this->data['records'] = $records->result_array();
+		$this->parser->parse('insurancelist',$this->data);
 	}
 	
 	public function workerlist(){
@@ -154,7 +167,8 @@ class index extends CI_Controller {
 		{
 			$records[$k]['image'] = base_url($v['image']);
 		}
-		$this->parser->parse('workerlist',array('records'=>$records));
+		$this->data['records'] = $records->result_array();
+		$this->parser->parse('workerlist',$this->data);
 	}
 	
 }

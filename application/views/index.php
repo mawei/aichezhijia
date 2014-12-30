@@ -1,12 +1,7 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<script src="../assets/static/js/jquerymobile/jquery-1.10.2.min.js"></script>
-	<link rel="stylesheet" href="../assets/static/js/jquerymobile/jquery.mobile-1.4.1.min.css">
-	<script src="../assets/static/js/jquerymobile/jquery.mobile-1.4.1.min.js"></script>
-</head>
+{head}
 <body>
-
 <div data-role="page" id="pageone">
   <div data-role="content">
     <h2>我的资料</h2>
