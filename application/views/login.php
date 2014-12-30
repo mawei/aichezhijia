@@ -13,7 +13,7 @@
     </form>
     <br/>
     <br/>
-    <a href="<?php echo base_url("index.php/index/register");?>">点击注册</a>
+    <a href="<?php echo site_url("index/register");?>">点击注册</a>
   </div>
 </div>
 

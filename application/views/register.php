@@ -6,7 +6,7 @@
 <div data-role="page">
   <div data-role="content">
   	<?php echo $error;?>
-    <form method="post" action="<?php echo base_url("index.php/index/registerpost");?>" data-ajax="false">
+    <form method="post" action="<?php echo site_url("index/registerpost");?>" data-ajax="false">
       <input type="text" name="username" id="username" placeholder="用户名">
       <input type="text" name="phone" id="phone" placeholder="手机号">
       <input type="text" name="carmodel" id="carmodel" placeholder="车型">
