@@ -28,7 +28,7 @@ class index extends CI_Controller {
 		$this->secret = "";
 	}
 	
-	function is_weixin()
+	private function is_weixin()
 	{
 		if ( strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false ) 
 		{         
@@ -48,7 +48,7 @@ class index extends CI_Controller {
 			$this->parser->parse('index',$data);
 			
 		}else{
-			if(is_weixin())
+			if(self::is_weixin())
 			{
 				$redirect_uri = "login";
 				redirect("https://open.weixin.qq.com/connect/oauth2/authorize?appid={$appid}&redirect_uri={$redirect_uri}&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect");
