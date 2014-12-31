@@ -42,7 +42,7 @@ $route['default_controller'] = "welcome";
 $route['index'] = "index";
 $route['admin'] = "admin";
 $route['404_override'] = '';
-//$route['examples'] = "examples/index";
+$route['examples'] = "examples/index";
 
 
 /* End of file routes.php */

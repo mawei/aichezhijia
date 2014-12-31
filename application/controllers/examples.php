@@ -8,8 +8,8 @@ class Examples extends CI_Controller {
 
 		$this->load->database();
 		$this->load->helper('url');
+
 		$this->load->library('grocery_CRUD');
-		
 	}
 
 	public function _example_output($output = null)
@@ -123,7 +123,9 @@ class Examples extends CI_Controller {
 	public function film_management()
 	{
 		$crud = new grocery_CRUD();
-
+		//$crud->set_crud_url_path(site_url('examples/film_management'));
+		//$crud->set_theme('twitter-bootstrap');
+		
 		$crud->set_table('film');
 		$crud->set_relation_n_n('actors', 'film_actor', 'actor', 'film_id', 'actor_id', 'fullname','priority');
 		$crud->set_relation_n_n('category', 'film_category', 'category', 'film_id', 'category_id', 'name');
@@ -141,7 +143,7 @@ class Examples extends CI_Controller {
 		try{
 			$crud = new grocery_CRUD();
 
-			$crud->set_theme('twitter-bootstrap');
+			//$crud->set_theme('twitter-bootstrap');
 			$crud->set_table('film');
 			$crud->set_relation_n_n('actors', 'film_actor', 'actor', 'film_id', 'actor_id', 'fullname','priority');
 			$crud->set_relation_n_n('category', 'film_category', 'category', 'film_id', 'category_id', 'name');

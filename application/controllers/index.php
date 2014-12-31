@@ -91,6 +91,23 @@ class index extends CI_Controller {
 		$this->parser->parse('login',$this->data);
 	}
 	
+	public function  loginout()
+	{
+		$this->session->set_userdata("userid",0);
+		redirect("index");
+	}
+	
+	public function needLogin()
+	{
+		if($this->session->userdata('userid') <= 0)
+		{
+			$error = "请先登陆";
+			$this->data['error'] = $error;
+			$this->parser->parse('login',$this->data);
+		}
+		return;
+	}
+	
 	public function loginpost()
 	{
 		$username = addslashes($_POST['username']);
@@ -151,17 +168,20 @@ class index extends CI_Controller {
 	
 	public function weihulist()
 	{
+		$this->needLogin();
 		$records = $this->db->query("select * from maintenance_record where userid={$this->session->userdata('userid')}");
 		$this->parser->parse('weihulist',array('records'=>$records->result_array()));
 	}
 	
 	public function insurancelist(){
+		$this->needLogin();
 		$records = $this->db->query("select * from insurance where userid={$this->session->userdata('userid')}");
 		$this->data['records'] = $records->result_array();
 		$this->parser->parse('insurancelist',$this->data);
 	}
 	
 	public function workerlist(){
+		$this->needLogin();
 		$records = $this->db->query("select * from worker")->result_array();
 		foreach ($records as $k=>$v)
 		{

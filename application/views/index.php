@@ -22,7 +22,9 @@
       <li><a href="#">建议意见</a></li>
       <li><a href="#">养车宝典</a></li>
       <li><a href="#">加入我们</a></li>
+      <li class=""><a href="<?php echo site_url('index/loginout') ?>">退出</a></li>
     </ul>
+    
   </div>
 </div> 
 

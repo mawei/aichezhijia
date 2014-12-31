@@ -21,17 +21,16 @@ class Admin extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
-
 		$this->load->database();
 		$this->load->helper('url');
-
+		$this->load->library('parser');
 		$this->load->library('grocery_CRUD');
 	}
 		
 	public function User()
 	{
 		$crud = new grocery_CRUD();
-		$crud->set_theme('twitter-bootstrap');
+// 		$crud->set_theme('twitter-bootstrap');
 		$crud->set_table('user');	
 		$crud->columns('id','username','phone','carmodel');
 		//$crud->edit_fields('username','phone','secret','type');
@@ -53,7 +52,7 @@ class Admin extends CI_Controller {
 		$crud->set_field_upload('xinshizheng_image','assets/uploads/files');
 		$crud->set_field_upload('baodan_image','assets/uploads/files');
 		
-		$crud->set_subject('用户管理');
+		$crud->set_subject('用户');
 		//$crud->required_fields('手机号');
 		$output = $crud->render();	
 		$this->load->view('UserManagement.php',$output);
@@ -62,10 +61,9 @@ class Admin extends CI_Controller {
 	public function appointment()
 	{
 		$crud = new grocery_CRUD();
-		$crud->set_theme('twitter-bootstrap');
 		$crud->set_table('appointment');
 		$crud->columns('id','workerid');
-		$crud->set_subject('保养预约管理');
+		$crud->set_subject('保养预约');
 		$crud->display_as('workerid','师傅');
 		$crud->set_relation('workerid','worker','name');
 		$output = $crud->render();
@@ -75,11 +73,11 @@ class Admin extends CI_Controller {
 	public function worker()
 	{
 		$crud = new grocery_CRUD();
-		$crud->set_theme('twitter-bootstrap');
+		$crud->set_theme('datatables');
 		$crud->set_table('worker');
  		$crud->columns('id','name','phone');
 		//$crud->edit_fields('partner_id','name','sex','age','photo','type');
- 		$crud->set_subject('师傅管理');
+ 		$crud->set_subject('师傅');
 		$crud->display_as('name','姓名');
 		$crud->display_as('phone','手机号');
 		$crud->display_as('image','照片');
@@ -91,11 +89,11 @@ class Admin extends CI_Controller {
 	public function maintenance_record()
 	{
 		$crud = new grocery_CRUD();
-		$crud->set_theme('twitter-bootstrap');
+		//$crud->set_theme('twitter-bootstrap');
 		$crud->set_table('maintenance_record');
 		//$crud->columns('id','userid','itemname','quantity','price','total','shop','date');
 		//$crud->edit_fields('partner_id','name','sex','age','photo','type');
-		$crud->set_subject('维修记录管理');
+		$crud->set_subject('维修记录');
 		$crud->display_as('userid','用户名');
 		$crud->display_as('itemname','配件名称');
 		$crud->display_as('price','价格');
@@ -112,11 +110,11 @@ class Admin extends CI_Controller {
 	public function insurance()
 	{
 		$crud = new grocery_CRUD();
-		$crud->set_theme('twitter-bootstrap');
+// 		$crud->set_theme('twitter-bootstrap');
 		$crud->set_table('insurance');
 		$crud->columns('id','userid','image');
 		//$crud->edit_fields('partner_id','name','sex','age','photo','type');
-		$crud->set_subject('维修记录管理');
+		$crud->set_subject('维修记录');
 		$crud->display_as('userid','用户名');
 		$crud->display_as('image','保单照片');
 		$crud->display_as('ID_front_image','身份证正面');
