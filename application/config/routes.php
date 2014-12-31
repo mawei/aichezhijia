@@ -41,6 +41,7 @@
 $route['default_controller'] = "welcome";
 $route['index'] = "index";
 $route['admin'] = "admin";
+$route['weixin'] = "weixin";
 $route['404_override'] = '';
 $route['examples'] = "examples/index";
 

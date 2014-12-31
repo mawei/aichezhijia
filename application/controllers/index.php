@@ -25,7 +25,7 @@ class index extends CI_Controller {
 		$this->load->helper('url');
 		$this->load->library('parser');
 		$this->appid = "wx13facdc7a21c75b6";
-		$this->secret = "";
+		$this->secret = "8ceb383fc897603a7edeab04c5311d37";
 		
 		$head = $this->load->view("include/head","",true);
 		$this->data['head'] = $head;
