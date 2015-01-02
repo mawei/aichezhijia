@@ -87,7 +87,6 @@ class wechatCallbackapiTest
 		$signature = isset($_GET["signature"]) ? $_GET["signature"] : "";
 		$timestamp = isset($_GET["timestamp"]) ? $_GET["timestamp"] : "";
 		$nonce = isset($_GET["nonce"]) ? $_GET['nonce'] : "";
-
 		$token = TOKEN;
 		$tmpArr = array($token, $timestamp, $nonce);
 		// use SORT_STRING rule
