@@ -54,7 +54,7 @@ class index extends CI_Controller {
 			//微信
 			if(self::is_weixin())
 			{
-				$redirect_uri = urlencode(site_url("index/login"));
+				$redirect_uri = urlencode(site_url("index/login?weixin=1"));
 				redirect("https://open.weixin.qq.com/connect/oauth2/authorize?appid={$this->appid}&redirect_uri={$redirect_uri}&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect");
 			}else{
 				//print_r($this->data);die();
@@ -68,7 +68,7 @@ class index extends CI_Controller {
 		//微信登陆
 		if($_REQUEST['code'] != "")
 		{
-			$url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid={$this->appid}&secret={$this->secret}&code={$_REQUEST['code']}&grant_type=authorization_code";
+			$url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid={$this->appid}&secret={$this->hsecret}&code={$_REQUEST['code']}&grant_type=authorization_code";
 		
 			$ch = curl_init($url) ;
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true) ; // 获取数据返回
