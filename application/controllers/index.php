@@ -74,16 +74,16 @@ class index extends CI_Controller {
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true) ; // 获取数据返回
 			curl_setopt($ch, CURLOPT_BINARYTRANSFER, true) ; // 在启用 CURLOPT_RETURNTRANSFER 时候将获取数据返回
 			$output = json_decode(curl_exec($ch)) ;
-			if($output['openid'] != "")
+			if($output->openid != "")
 			{
-				$query = $this->db->query("select * from `user` where weixinID='{$output['openid']}'");
+				$query = $this->db->query("select * from `user` where weixinID='{$output->openid}'");
 				if(count($query->result_array())>0)
 				{
 					$this->session->set_userdata('userid', $query->result_array()[0]['id']);
 					redirect("index");
 				}else{
 					$this->data['error'] = "";
-					$this->data['weixinID'] = $output['openid'];
+					$this->data['weixinID'] = $output->openid;
 					$this->parser->parse('login',$this->data);
 				}
 			}
