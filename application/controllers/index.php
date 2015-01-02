@@ -42,6 +42,7 @@ class index extends CI_Controller {
 	
 	public function index()
 	{
+		//echo  urlencode(site_url("index/login"));die();
 		$this->data["error"] = "";
 		//已登录
 		if($this->session->userdata('userid') > 0)
@@ -53,7 +54,7 @@ class index extends CI_Controller {
 			//微信
 			if(self::is_weixin())
 			{
-				$redirect_uri = site_url("index/login");
+				$redirect_uri = urlencode(site_url("index/login"));
 				redirect("https://open.weixin.qq.com/connect/oauth2/authorize?appid={$this->appid}&redirect_uri={$redirect_uri}&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect");
 			}else{
 				//print_r($this->data);die();
