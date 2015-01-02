@@ -53,7 +53,7 @@ class index extends CI_Controller {
 			//微信
 			if(self::is_weixin())
 			{
-				$redirect_uri = "login";
+				$redirect_uri = site_url("index/login");
 				redirect("https://open.weixin.qq.com/connect/oauth2/authorize?appid={$this->appid}&redirect_uri={$redirect_uri}&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect");
 			}else{
 				//print_r($this->data);die();
