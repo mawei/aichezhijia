@@ -84,7 +84,6 @@ class index extends CI_Controller {
 				}else{
 					$this->data['error'] = "";
 					$this->data['weixinID'] = $output->openid;
-					$this->parser->parse('login',$this->data);
 				}
 			}
 		}
