@@ -2,7 +2,6 @@
 <html>
 {head}
 <body>
-
 <div data-role="page">
   <div data-role="content">
    {error}
@@ -17,7 +16,6 @@
     <a href="<?php echo site_url("index/register");?>">点击注册</a>
   </div>
 </div>
-
 </body>
 </html>
 

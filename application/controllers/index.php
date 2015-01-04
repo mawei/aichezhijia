@@ -28,7 +28,11 @@ class index extends CI_Controller {
 		$this->secret = "8ceb383fc897603a7edeab04c5311d37";
 		
 		$head = $this->load->view("include/head","",true);
+		$header = $this->load->view("include/header","",true);
+		$footer = $this->load->view("include/footer","",true);
 		$this->data['head'] = $head;
+		$this->data['header'] = $header;
+		$this->data['footer'] = $footer;
 	}
 	
 	private function is_weixin()
@@ -42,6 +46,19 @@ class index extends CI_Controller {
 	
 	public function index()
 	{
+		if(isset($_GET['type']))
+		{
+			if($_GET['type'] == "")
+			{
+				$type = "profile";
+			}else{
+				$type = $_GET['type'];
+			}
+		}else{
+			$type = "profile";
+		}
+		$this->data['type'] = $type;
+		
 		//echo  urlencode(site_url("index/login"));die();
 		$this->data["error"] = "";
 		//已登录

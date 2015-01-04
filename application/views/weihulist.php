@@ -2,7 +2,7 @@
 <html>
 {head}
 <body>
-
+{header}
 <div data-role="page">
   <div data-role="content">
   	<ul data-role="listview">
@@ -16,7 +16,7 @@
 	</ul>
   </div>
 </div>
-
+{footer}
 </body>
 </html>
 

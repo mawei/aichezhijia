@@ -4,6 +4,7 @@
 <body>
 
 <div data-role="page">
+{header}
   <div data-role="content">
   	<ul data-role="listview">
   	{records}
@@ -22,6 +23,7 @@
 	 {/records}
 	</ul>
   </div>
+  {footer}
 </div>
 
 </body>
