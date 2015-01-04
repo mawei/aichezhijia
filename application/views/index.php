@@ -12,7 +12,7 @@
       <li><a href="#">我的轮胎<span class="ui-li-count">{wheel}</span></a></li>
       <li><a href="<?php echo site_url('index/weihulist') ?>">我的维护</a></li>
       <li><a href="<?php echo site_url('index/insurancelist') ?>">我的保险</a></li>
-      
+      <li> <a href="<?php echo site_url('index/loginout') ?>">退出</a></li>
     </ul>
     
     
