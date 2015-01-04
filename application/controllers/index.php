@@ -118,8 +118,16 @@ class index extends CI_Controller {
 		if(count($query->result_array())>0)
 		{
 			$this->session->set_userdata('userid', $query->result_array()[0]['id']);
-			$this->db->query("update `user` set weixinID='{$weixinID}' where id = {$query->result_array()[0]['id']}");
-			redirect("index");
+			if($weixinID != "")
+			{
+				$this->db->query("update `user` set weixinID='{$weixinID}' where id = {$query->result_array()[0]['id']}");
+			}
+			if($query->result_array()[0]['type'] == 'admin')
+			{
+				redirect(site_url("admin/user"));
+			}else{
+				redirect("index");
+			}
 		}else{
 			$error = "请输入正确的用户名及密码";
 			$this->data['error'] = $error;

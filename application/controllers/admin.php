@@ -46,14 +46,13 @@ class Admin extends CI_Controller {
 		$crud->display_as('jiashizheng_image','驾驶证');
 		$crud->display_as('xinshizheng_image','行驶证');
 		$crud->display_as('baodan_image','保单');
-		//$crud->display_as('last_maintenance_detail','上次保养明细');
+		$crud->display_as('type','类型');
 		
 		$crud->set_field_upload('jiashizheng_image','assets/uploads/files');
 		$crud->set_field_upload('xinshizheng_image','assets/uploads/files');
 		$crud->set_field_upload('baodan_image','assets/uploads/files');
 		
 		$crud->set_subject('用户');
-		//$crud->required_fields('手机号');
 		$output = $crud->render();	
 		$this->load->view('UserManagement.php',$output);
 	}
