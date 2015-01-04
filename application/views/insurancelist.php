@@ -7,12 +7,19 @@
   <div data-role="content">
   	<ul data-role="listview">
   	{records}
-	  <li>
-	    <h2>{itemname}</h2>
-	    <p>数量：{quantity} 价格：{price} 总价：{total} </p>
-	   	<p>店铺：{shop}</p>
-	  </li>
-	  {/records}
+	    <h2>保单照片：</h2>
+	    <br/>
+	    <img src={image} />
+	    <h2>身份证正面：</h2>
+	    <br/>
+	    <img src={ID_front_image} />
+	    <h2>身份证反面：</h2>
+	    <br/>
+	    <img src={ID_back_image} />
+	    <h2>银行理赔卡照片：</h2>
+	    <br/>
+	    <img src={bank_image} />
+	 {/records}
 	</ul>
   </div>
 </div>

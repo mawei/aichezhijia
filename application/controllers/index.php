@@ -94,7 +94,8 @@ class index extends CI_Controller {
 	public function  loginout()
 	{
 		$this->session->set_userdata("userid",0);
-		redirect("index");
+		$this->data['error'] = "";
+		$this->parser->parse('login',$this->data);
 	}
 	
 	public function needLogin()
@@ -170,13 +171,21 @@ class index extends CI_Controller {
 	{
 		$this->needLogin();
 		$records = $this->db->query("select * from maintenance_record where userid={$this->session->userdata('userid')}");
-		$this->parser->parse('weihulist',array('records'=>$records->result_array()));
+		$this->data['records'] = $records->result_array();
+		$this->parser->parse('weihulist',$this->data);
 	}
 	
 	public function insurancelist(){
 		$this->needLogin();
-		$records = $this->db->query("select * from insurance where userid={$this->session->userdata('userid')}");
-		$this->data['records'] = $records->result_array();
+		$records = $this->db->query("select * from insurance where userid={$this->session->userdata('userid')}")->result_array();;
+		foreach ($records as $k=>$v)
+		{
+			$records[$k]['image'] = base_url('assets/uploads/files/' . $v['image']);
+			$records[$k]['ID_front_image'] = base_url('assets/uploads/files/' . $v['ID_front_image']);
+			$records[$k]['ID_back_image'] = base_url('assets/uploads/files/' . $v['ID_back_image']);
+			$records[$k]['bank_image'] = base_url('assets/uploads/files/' . $v['bank_image']);
+		}
+		$this->data['records'] = $records;
 		$this->parser->parse('insurancelist',$this->data);
 	}
 	
@@ -185,9 +194,9 @@ class index extends CI_Controller {
 		$records = $this->db->query("select * from worker")->result_array();
 		foreach ($records as $k=>$v)
 		{
-			$records[$k]['image'] = base_url($v['image']);
+			$records[$k]['image'] = base_url('assets/uploads/files/' . $v['image']);
 		}
-		$this->data['records'] = $records->result_array();
+		$this->data['records'] = $records;
 		$this->parser->parse('workerlist',$this->data);
 	}
 	

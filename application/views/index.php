@@ -13,7 +13,7 @@
     <h2>爱车师傅</h2>
     <ul data-role="listview">
       <li><a href="<?php echo site_url('index/workerlist') ?>">师傅预约</a></li>
-      <li><a href="<?php echo site_url('index/workerlist') ?>'">师傅在线</a></li>
+      <li><a href="<?php echo site_url('index/workerlist') ?>">师傅在线</a></li>
       <li><a href="#">师傅上门</a></li>
       <li><a href="#">增值服务</a></li>
     </ul>

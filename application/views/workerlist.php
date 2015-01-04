@@ -10,7 +10,7 @@
 	  <li>
 	  	<img alt="" src={image} >
 	    <h2>{name}</h2>
-	    <p>电话：{phone}</p>
+	    <p><a href="tel:{phone}">电话：{phone}</a></p>
 	  </li>
 	  {/records}
 	</ul>
