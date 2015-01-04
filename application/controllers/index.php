@@ -142,8 +142,10 @@ class index extends CI_Controller {
 			if($query->result_array()[0]['type'] == 'admin')
 			{
 				redirect(site_url("admin/user"));
-			}else{
+			}elseif($weixinID != ""){
 				redirect("index");
+			}else{
+				redirect('site');
 			}
 		}else{
 			$error = "请输入正确的用户名及密码";
