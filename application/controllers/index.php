@@ -61,20 +61,18 @@ class index extends CI_Controller {
 		
 		//echo  urlencode(site_url("index/login"));die();
 		$this->data["error"] = "";
-		//已登录
-		if($this->session->userdata('userid') > 0)
+		//微信
+		if(self::is_weixin())
 		{
-			$query = $this->db->query("select * from `user` where id={$this->session->userdata('userid')}");
-			$this->data['wheel'] = $query->result_array()[0]['wheel'];
-			$this->parser->parse('index',$this->data);
+			$redirect_uri = urlencode(site_url("index/login?weixin=1"));
+			redirect("https://open.weixin.qq.com/connect/oauth2/authorize?appid={$this->appid}&redirect_uri={$redirect_uri}&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect");
 		}else{
-			//微信
-			if(self::is_weixin())
+			if($this->session->userdata('userid') > 0)
 			{
-				$redirect_uri = urlencode(site_url("index/login?weixin=1"));
-				redirect("https://open.weixin.qq.com/connect/oauth2/authorize?appid={$this->appid}&redirect_uri={$redirect_uri}&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect");
+				$query = $this->db->query("select * from `user` where id={$this->session->userdata('userid')}");
+				$this->data['wheel'] = $query->result_array()[0]['wheel'];
+				$this->parser->parse('index',$this->data);
 			}else{
-				//print_r($this->data);die();
 				$this->parser->parse('login',$this->data);
 			}
 		}
@@ -142,7 +140,7 @@ class index extends CI_Controller {
 			if($query->result_array()[0]['type'] == 'admin')
 			{
 				redirect(site_url("admin/user"));
-			}elseif($weixinID != ""){
+			}elseif(self::is_weixin()){
 				redirect("index");
 			}else{
 				redirect('site');
