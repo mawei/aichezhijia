@@ -12,7 +12,6 @@
 		<div class="list-group">
 		{workerlist}
 		  <a href="#" class="list-group-item">
-		  <span></span>
 		    <h4 class="list-group-item-heading">{name}</h4>
 		    <p class="list-group-item-text">联系方式：{phone}</p>
 		  </a>

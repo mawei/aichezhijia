@@ -109,7 +109,7 @@ class index extends CI_Controller {
 		
 		$this->data["error"] = "";
 		//微信
-		$loginResult = needlogin();
+		$loginResult = $this->needlogin();
 		if($loginResult == 'success')
 		{
 			$query = $this->db->query("select * from `user` where id='1'");
@@ -201,14 +201,20 @@ class index extends CI_Controller {
 	public function weihulist()
 	{
 		
-		$this->needLogin();
-		$records = $this->db->query("select * from maintenance_record where userid={$this->session->userdata('userid')}");
-		$this->data['records'] = $records->result_array();
-		$this->parser->parse('weihulist',$this->data);
+		$loginResult = $this->needlogin();
+		if($loginResult == 'success')
+		{
+			$records = $this->db->query("select * from maintenance_record where userid={$this->session->userdata('userid')}");
+			$this->data['records'] = $records->result_array();
+			$this->parser->parse('weihulist',$this->data);
+		}elseif($loginResult != '')
+		{
+			redirect("index/login?weixinID={$loginResult}");
+		}
 	}
 	
 	public function insurancelist(){
-		$loginResult = needlogin();
+		$loginResult = $this->needlogin();
 		if($loginResult == 'success')
 		{
 			$records = $this->db->query("select * from insurance where userid={$this->session->userdata('userid')}")->result_array();;
