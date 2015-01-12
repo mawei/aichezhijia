@@ -9,7 +9,7 @@
       <input type="text" name="username" id="username" placeholder="用户名">
       <input type="password" name="password" id="password" placeholder="密码">
       <input type="hidden" name="weixinID" id="weixinID" value="{weixinID}">
-      <input type="hidden" name="currenturl" id="currenturl" value="{currenturl}">
+      <input type="hidden" name="referurl" id="referurl" value="{referurl}">
       <input type="submit" data-inline="false" value="提交">
     </form>
     <br/>

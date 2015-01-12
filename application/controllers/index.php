@@ -26,6 +26,7 @@ class index extends CI_Controller {
 		$this->load->library('parser');
 		$this->appid = "wx13facdc7a21c75b6";
 		$this->secret = "8ceb383fc897603a7edeab04c5311d37";
+		$this->weixinID = "";
 		
 		$head = $this->load->view("include/head","",true);
 		$header = $this->load->view("include/header","",true);
@@ -44,25 +45,31 @@ class index extends CI_Controller {
 		return false;
 	}
 	
-	public function needlogin($currentUrl)
+	public function needlogin()
 	{
 		if(self::is_weixin() && ($this->session->userdata('userid') > 0))
 		{
-			return true;
+			return "success";
 		}
 		if(self::is_weixin() && !($this->session->userdata('userid') > 0))
 		{
-			$redirect_uri = urlencode(site_url("index/loginInWeixin?currenturl={$currentUrl}"));
-			redirect("https://open.weixin.qq.com/connect/oauth2/authorize?appid={$this->appid}&redirect_uri={$redirect_uri}&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect");
-		}
-		if(!self::is_weixin())
-		{
-			redirect('site');
+			$redirect_uri = urlencode(site_url("index/loginInWeixin?weixin=1"));
+			$url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid={$this->appid}&redirect_uri={$redirect_uri}&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect";
+			$curl = curl_init();
+			curl_setopt($curl, CURLOPT_URL,$url);
+			curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 1);
+			curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+			curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+			curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
+			curl_setopt($curl, CURLOPT_MAXREDIRS, 10);
+			$rs = curl_exec($curl);
+			return $rs;
 		}
 	}
 	
 	public function loginInWeixin()
 	{
+		$result = "";
 		if($_REQUEST['code'] != "")
 		{
 			$url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid={$this->appid}&secret={$this->secret}&code={$_REQUEST['code']}&grant_type=authorization_code";
@@ -76,12 +83,13 @@ class index extends CI_Controller {
 				if(count($query->result_array())>0)
 				{
 					$this->session->set_userdata('userid', $query->result_array()[0]['id']);
-					redirect("index");
+					$result = 'success';
 				}else{
-					redirect("login?weixinID={$output->openid}&currenturl={$_REQUEST['currenturl']}");
+					$result = $output->openid;
 				}
 			}
 		}
+		echo $result;
 	}
 	
 	public function index()
@@ -101,21 +109,14 @@ class index extends CI_Controller {
 		
 		$this->data["error"] = "";
 		//微信
-		$weixin = isset($_GET['weixin']) ? $_GET['weixin'] : "";
-		if(self::is_weixin() && $weixin == "access")
+		$loginResult = needlogin();
+		if($loginResult == 'success')
 		{
-			//微信已登录
-			$query = $this->db->query("select * from `user` where id={$this->session->userdata('userid')}");
+			$query = $this->db->query("select * from `user` where id='1'");
 			$this->data['wheel'] = $query->result_array()[0]['wheel'];
 			$this->parser->parse('index',$this->data);
-		}
-		elseif(self::is_weixin() && $weixin != "access")
-		{
-			//微信未登录
-			$redirect_uri = urlencode(site_url("index/login?weixin=1"));
-			redirect("https://open.weixin.qq.com/connect/oauth2/authorize?appid={$this->appid}&redirect_uri={$redirect_uri}&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect");
-		}else{
-			
+		}elseif($loginResult != ''){
+			redirect("index/login?weixinID={$loginResult}");
 		}
 	}
 	
@@ -123,7 +124,7 @@ class index extends CI_Controller {
 	{
 		//微信登陆
 		$this->data['weixinID'] = $_GET['weixinID'];
-		$this->data['currenturl'] = $_GET['currenturl'];
+		$this->data['referurl'] = $_SERVER['HTTP_REFERER'];
 		$this->data['error'] = "";
 		$this->parser->parse('login',$this->data);
 	}
@@ -135,23 +136,12 @@ class index extends CI_Controller {
 		$this->parser->parse('login',$this->data);
 	}
 	
-	public function needLogin()
-	{
-		if($this->session->userdata('userid') <= 0)
-		{
-			$error = "请先登陆";
-			$this->data['error'] = $error;
-			$this->parser->parse('login',$this->data);
-		}
-		return;
-	}
-	
 	public function loginpost()
 	{
 		$username = addslashes($_POST['username']);
 		$password = addslashes($_POST['password']);
 		$weixinID = addslashes($_POST['weixinID']);
-		$currenturl = $_POST['currenturl'];
+		$referurl = addslashes($_POST['referurl']);
 		$query = $this->db->query("select * from `user` where username='{$username}' and password='{$password}'");
 		if(count($query->result_array())>0)
 		{
@@ -159,7 +149,7 @@ class index extends CI_Controller {
 			if($weixinID != "")
 			{
 				$this->db->query("update `user` set weixinID='{$weixinID}' where id = {$query->result_array()[0]['id']}");
-				redirect($currenturl);
+				redirect($referurl);
 			}
 		}else{
 			$error = "请输入正确的用户名及密码";
@@ -210,35 +200,86 @@ class index extends CI_Controller {
 	
 	public function weihulist()
 	{
-		$this->needLogin('weihulist');
+		
+		$this->needLogin();
 		$records = $this->db->query("select * from maintenance_record where userid={$this->session->userdata('userid')}");
 		$this->data['records'] = $records->result_array();
 		$this->parser->parse('weihulist',$this->data);
 	}
 	
 	public function insurancelist(){
-		$this->needLogin('insurancelist');
-		$records = $this->db->query("select * from insurance where userid={$this->session->userdata('userid')}")->result_array();;
-		foreach ($records as $k=>$v)
+		$loginResult = needlogin();
+		if($loginResult == 'success')
 		{
-			$records[$k]['image'] = base_url('assets/uploads/files/' . $v['image']);
-			$records[$k]['ID_front_image'] = base_url('assets/uploads/files/' . $v['ID_front_image']);
-			$records[$k]['ID_back_image'] = base_url('assets/uploads/files/' . $v['ID_back_image']);
-			$records[$k]['bank_image'] = base_url('assets/uploads/files/' . $v['bank_image']);
+			$records = $this->db->query("select * from insurance where userid={$this->session->userdata('userid')}")->result_array();;
+			foreach ($records as $k=>$v)
+			{
+				$records[$k]['image'] = base_url('assets/uploads/files/' . $v['image']);
+				$records[$k]['ID_front_image'] = base_url('assets/uploads/files/' . $v['ID_front_image']);
+				$records[$k]['ID_back_image'] = base_url('assets/uploads/files/' . $v['ID_back_image']);
+				$records[$k]['bank_image'] = base_url('assets/uploads/files/' . $v['bank_image']);
+			}
+			$this->data['records'] = $records;
+			$this->parser->parse('insurancelist',$this->data);
 		}
-		$this->data['records'] = $records;
-		$this->parser->parse('insurancelist',$this->data);
+		elseif($loginResult != '')
+		{
+			redirect("index/login?weixinID={$loginResult}");
+		}
+		
 	}
 	
 	public function workerlist(){
-		$this->needLogin('worklist');
-		$records = $this->db->query("select * from worker")->result_array();
-		foreach ($records as $k=>$v)
+		$loginResult = $this->needlogin();
+		if($loginResult == 'success')
 		{
-			$records[$k]['image'] = base_url('assets/uploads/files/' . $v['image']);
+			$records = $this->db->query("select * from worker")->result_array();
+			foreach ($records as $k=>$v)
+			{
+				$records[$k]['image'] = base_url('assets/uploads/files/' . $v['image']);
+			}
+			$this->data['records'] = $records;
+			$this->parser->parse('workerlist',$this->data);
 		}
-		$this->data['records'] = $records;
-		$this->parser->parse('workerlist',$this->data);
+		elseif($loginResult != '')
+		{
+			redirect("index/login?weixinID={$loginResult}");
+		}
+	}
+	
+	public function baodian()
+	{
+		if(isset($_GET['newsid']) && $_GET['newsid'] != ""){
+			$news = $this->db->query("select * from worker where id={$newsid}")->result_array();
+			$this->data['news'] = $news;
+			$this->parser->parse('newsdetail',$this->data);
+		}else{
+			$news = $this->db->query("select * from worker")->result_array();
+			$this->data['news'] = $news;
+			$this->parser->parse('newslist',$this->data);
+		}
+	}
+	
+	public function suggest()
+	{
+		if(isset($_POST['content']) && $_POST['content'] != "")
+		{
+			$this->db->query("insert into `suggest` (content,userid) values ({$_POST['content']},{$this->session->userdata('userid')})");
+		}else{
+			$this->parser->parse('suggest',$this->data);
+		}
+	}
+	
+	public function joinus()
+	{
+		$result = $this->db->query("select * from `config` where key='joinus'")->result_array();
+		if(count($result) > 0)
+		{
+			$this->data['joinus'] = $result[0]['value'];
+		}else{
+			$this->data['joinus'] = "暂时没有";
+		}
+		$this->parser->parse('joinus',$this->data);
 	}
 	
 }
