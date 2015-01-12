@@ -8,24 +8,17 @@
 		
 		
 		<div class="container-fluid noPadding">
-					<div class="container text-center">
 					
-		<table class="table">
-		  <tr align="left">
-		  	<th align="left"></th>
-		  	<th align="left">名字</th>
-		  	<th align="left">号码</th>
-		  </tr>
-		  {workerlist}
-		  <tr align="left">
-		  	<td align="left"><img alt="" src="{image}"></td>
-		  	<td align="left">{name}</td>
-		  	<td>{phone}</td>
-		  </tr>
-		  {/workerlist}
-		</table>
-		
+		<div class="list-group">
+		{workerlist}
+		  <a href="#" class="list-group-item">
+		  <span></span>
+		    <h4 class="list-group-item-heading">{name}</h4>
+		    <p class="list-group-item-text">联系方式：{phone}</p>
+		  </a>
+		{/workerlist}
 		</div>
+		
 			<!-- Footer -->
 		</div>
 

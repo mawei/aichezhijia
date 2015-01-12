@@ -149,8 +149,8 @@ class index extends CI_Controller {
 			if($weixinID != "")
 			{
 				$this->db->query("update `user` set weixinID='{$weixinID}' where id = {$query->result_array()[0]['id']}");
-				redirect($referurl);
 			}
+			redirect($referurl);
 		}else{
 			$error = "请输入正确的用户名及密码";
 			$this->data['error'] = $error;
