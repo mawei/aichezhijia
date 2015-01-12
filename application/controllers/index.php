@@ -44,6 +44,46 @@ class index extends CI_Controller {
 		return false;
 	}
 	
+	public function needlogin($currentUrl)
+	{
+		if(self::is_weixin() && ($this->session->userdata('userid') > 0))
+		{
+			return true;
+		}
+		if(self::is_weixin() && !($this->session->userdata('userid') > 0))
+		{
+			$redirect_uri = urlencode(site_url("index/loginInWeixin?currenturl={$currentUrl}"));
+			redirect("https://open.weixin.qq.com/connect/oauth2/authorize?appid={$this->appid}&redirect_uri={$redirect_uri}&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect");
+		}
+		if(!self::is_weixin())
+		{
+			redirect('site');
+		}
+	}
+	
+	public function loginInWeixin()
+	{
+		if($_REQUEST['code'] != "")
+		{
+			$url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid={$this->appid}&secret={$this->secret}&code={$_REQUEST['code']}&grant_type=authorization_code";
+			$ch = curl_init($url) ;
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true) ; // 获取数据返回
+			curl_setopt($ch, CURLOPT_BINARYTRANSFER, true) ; // 在启用 CURLOPT_RETURNTRANSFER 时候将获取数据返回
+			$output = json_decode(curl_exec($ch)) ;
+			if($output->openid != "")
+			{
+				$query = $this->db->query("select * from `user` where weixinID='{$output->openid}'");
+				if(count($query->result_array())>0)
+				{
+					$this->session->set_userdata('userid', $query->result_array()[0]['id']);
+					redirect("index");
+				}else{
+					redirect("login?weixinID={$output->openid}&currenturl={$_REQUEST['currenturl']}");
+				}
+			}
+		}
+	}
+	
 	public function index()
 	{
 		if(isset($_GET['type']))
@@ -59,7 +99,6 @@ class index extends CI_Controller {
 		}
 		$this->data['type'] = $type;
 		
-		//echo  urlencode(site_url("index/login"));die();
 		$this->data["error"] = "";
 		//微信
 		$weixin = isset($_GET['weixin']) ? $_GET['weixin'] : "";
@@ -76,43 +115,15 @@ class index extends CI_Controller {
 			$redirect_uri = urlencode(site_url("index/login?weixin=1"));
 			redirect("https://open.weixin.qq.com/connect/oauth2/authorize?appid={$this->appid}&redirect_uri={$redirect_uri}&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect");
 		}else{
-			if($this->session->userdata('userid') > 0)
-			{
-				//网页已登录
-				$query = $this->db->query("select * from `user` where id={$this->session->userdata('userid')}");
-				$this->data['wheel'] = $query->result_array()[0]['wheel'];
-				$this->parser->parse('index',$this->data);
-			}else{
-				//网页未登录
-				$this->parser->parse('login',$this->data);
-			}
+			
 		}
 	}
 	
 	public function login()
 	{
 		//微信登陆
-		if($_REQUEST['code'] != "")
-		{
-			$url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid={$this->appid}&secret={$this->secret}&code={$_REQUEST['code']}&grant_type=authorization_code";
-		
-			$ch = curl_init($url) ;
-			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true) ; // 获取数据返回
-			curl_setopt($ch, CURLOPT_BINARYTRANSFER, true) ; // 在启用 CURLOPT_RETURNTRANSFER 时候将获取数据返回
-			$output = json_decode(curl_exec($ch)) ;
-			if($output->openid != "")
-			{
-				$query = $this->db->query("select * from `user` where weixinID='{$output->openid}'");
-				if(count($query->result_array())>0)
-				{
-					$this->session->set_userdata('userid', $query->result_array()[0]['id']);
-					redirect("index?weixin=access");
-				}else{
-					$this->data['error'] = "";
-					$this->data['weixinID'] = $output->openid;
-				}
-			}
-		}
+		$this->data['weixinID'] = $_GET['weixinID'];
+		$this->data['currenturl'] = $_GET['currenturl'];
 		$this->data['error'] = "";
 		$this->parser->parse('login',$this->data);
 	}
@@ -140,6 +151,7 @@ class index extends CI_Controller {
 		$username = addslashes($_POST['username']);
 		$password = addslashes($_POST['password']);
 		$weixinID = addslashes($_POST['weixinID']);
+		$currenturl = $_POST['currenturl'];
 		$query = $this->db->query("select * from `user` where username='{$username}' and password='{$password}'");
 		if(count($query->result_array())>0)
 		{
@@ -147,14 +159,7 @@ class index extends CI_Controller {
 			if($weixinID != "")
 			{
 				$this->db->query("update `user` set weixinID='{$weixinID}' where id = {$query->result_array()[0]['id']}");
-			}
-			if($query->result_array()[0]['type'] == 'admin')
-			{
-				redirect(site_url("admin/user"));
-			}elseif(self::is_weixin()){
-				redirect("index?weixin=access");
-			}else{
-				redirect('site');
+				redirect($currenturl);
 			}
 		}else{
 			$error = "请输入正确的用户名及密码";
@@ -205,14 +210,14 @@ class index extends CI_Controller {
 	
 	public function weihulist()
 	{
-		$this->needLogin();
+		$this->needLogin('weihulist');
 		$records = $this->db->query("select * from maintenance_record where userid={$this->session->userdata('userid')}");
 		$this->data['records'] = $records->result_array();
 		$this->parser->parse('weihulist',$this->data);
 	}
 	
 	public function insurancelist(){
-		$this->needLogin();
+		$this->needLogin('insurancelist');
 		$records = $this->db->query("select * from insurance where userid={$this->session->userdata('userid')}")->result_array();;
 		foreach ($records as $k=>$v)
 		{
@@ -226,7 +231,7 @@ class index extends CI_Controller {
 	}
 	
 	public function workerlist(){
-		$this->needLogin();
+		$this->needLogin('worklist');
 		$records = $this->db->query("select * from worker")->result_array();
 		foreach ($records as $k=>$v)
 		{

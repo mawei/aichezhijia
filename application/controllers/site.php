@@ -42,12 +42,17 @@ class Site extends CI_Controller {
 	
 	public function needLogin()
 	{
+
 		if(!$this->session->userdata('userid') > 0)
 		{
 			redirect("index/login");
 			return false;
 		}
 		return true;
+	}
+	
+	public function login(){
+		$this->parser->parse('site/login',$this->data);
 	}
 	
 	public function profile(){
