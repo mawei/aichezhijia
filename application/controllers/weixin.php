@@ -21,7 +21,11 @@ class Weixin extends CI_Controller {
 	{
 		define("TOKEN", "weixin");
 		$wechatObj = new wechatCallbackapiTest();
-		$wechatObj->valid();
+		if (!isset($_GET['echostr'])) {
+			$wechatObj->responseMsg();
+		}else{
+			$wechatObj->valid();
+		}
 	}
 }
 
@@ -87,18 +91,6 @@ class wechatCallbackapiTest
 		}
 	}
 	
-	private function transmitService($object)
-	{
-		$xmlTpl = "<xml>
-		<ToUserName><![CDATA[%s]]></ToUserName>
-		<FromUserName><![CDATA[%s]]></FromUserName>
-		<CreateTime>%s</CreateTime>
-		<MsgType><![CDATA[transfer_customer_service]]></MsgType>
-		</xml>";
-		$result = sprintf($xmlTpl, $object->FromUserName, $object->ToUserName, time());
-		return $result;
-	}
-
 	private function checkSignature()
 	{
 		// you must define TOKEN by yourself
