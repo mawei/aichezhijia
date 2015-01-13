@@ -286,7 +286,7 @@ class index extends CI_Controller {
 		$this->data['message'] = $message;
 		if(isset($_POST['content']) && $_POST['content'] != "")
 		{
-			$this->db->query("insert into `suggest` (content,userid) values ({$_POST['content']},{$this->session->userdata('userid')})");
+			$this->db->query("insert into `suggest` (content,userid) values (\"{$_POST['content']}\",\"{$this->session->userdata('userid')}\")");
 			$this->data['message'] = "提交成功";
 			$message = "提交成功";
 			$this->parser->parse('suggest',$this->data);
