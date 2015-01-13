@@ -133,7 +133,7 @@ class index extends CI_Controller {
 	{
 		//微信登陆
 		$this->data['weixinID'] = isset($_GET['weixinID']) ? $_GET['weixinID'] :"";
-		$this->data['referurl'] = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : "index.php/index";
+		$this->data['referurl'] = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : "index";
 		$this->data['error'] = "";
 		$this->parser->parse('login',$this->data);
 	}
@@ -151,6 +151,7 @@ class index extends CI_Controller {
 		$password = addslashes($_POST['password']);
 		$weixinID = addslashes($_POST['weixinID']);
 		$referurl = addslashes($_POST['referurl']);
+		//print_r($referurl);die();
 		$query = $this->db->query("select * from `user` where username='{$username}' and password='{$password}'");
 		if(count($query->result_array())>0)
 		{
@@ -160,7 +161,7 @@ class index extends CI_Controller {
 				$this->db->query("update `user` set weixinID='{$weixinID}' where id = {$query->result_array()[0]['id']}");
 			}
 			//print_r($referurl);die();
-			redirect($referurl);
+			redirect("index");
 		}else{
 			$error = "请输入正确的用户名及密码";
 			$this->data['error'] = $error;
@@ -278,9 +279,14 @@ class index extends CI_Controller {
 	
 	public function suggest()
 	{
+		$message = "";
+		$this->data['message'] = $message;
 		if(isset($_POST['content']) && $_POST['content'] != "")
 		{
 			$this->db->query("insert into `suggest` (content,userid) values ({$_POST['content']},{$this->session->userdata('userid')})");
+			$this->data['message'] = "提交成功";
+			$message = "提交成功";
+			$this->parser->parse('suggest',$this->data);
 		}else{
 			$this->parser->parse('suggest',$this->data);
 		}

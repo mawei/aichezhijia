@@ -62,6 +62,7 @@ foreach($css_files as $file): ?>
 				<li><a href='<?php echo site_url('admin/insurance')?>'>保险管理</a></li>
 				<li><a href='<?php echo site_url('admin/appointment')?>'>预约管理</a></li>
 				<li><a href='<?php echo site_url('admin/news')?>'>新闻管理</a></li>
+				<li><a href='<?php echo site_url('admin/suggest')?>'>意见管理</a></li>
 				<li><a href='<?php echo site_url('admin/config')?>'>网站配置</a></li>
             </ul>
             <ul class="nav nav-sidebar">

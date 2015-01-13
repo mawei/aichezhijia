@@ -127,13 +127,25 @@ class Admin extends CI_Controller {
 		$crud = new grocery_CRUD();
 		$crud->set_table('news');
 		$crud->set_subject('新闻');
-		$crud->columns('content');
 		$crud->display_as('title','标题');
 		$crud->display_as('content','内容');
 	
 		$output = $crud->render();
 		$this->load->view('UserManagement.php',$output);
 	}
+	
+	public function suggest()
+	{
+		$crud = new grocery_CRUD();
+		$crud->set_table('suggest');
+		$crud->set_subject('意见管理');
+		$crud->display_as('content','内容');
+		$crud->display_as('userid','用户');
+		$crud->set_relation('userid','user','username');
+		$output = $crud->render();
+		$this->load->view('UserManagement.php',$output);
+	}
+	
 	
 	
 	public function insurance()
