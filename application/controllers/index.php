@@ -24,6 +24,8 @@ class index extends CI_Controller {
 		$this->load->database();
 		$this->load->helper('url');
 		$this->load->library('parser');
+		$this->load->helper('text');
+		
 		$this->appid = "wx13facdc7a21c75b6";
 		$this->secret = "8ceb383fc897603a7edeab04c5311d37";
 		$this->weixinID = "";
@@ -47,23 +49,33 @@ class index extends CI_Controller {
 	
 	public function needlogin()
 	{
-		if(self::is_weixin() && ($this->session->userdata('userid') > 0))
+		if(self::is_weixin())
 		{
-			return "success";
-		}
-		if(self::is_weixin() && !($this->session->userdata('userid') > 0))
-		{
-			$redirect_uri = urlencode(site_url("index/loginInWeixin?weixin=1"));
-			$url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid={$this->appid}&redirect_uri={$redirect_uri}&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect";
-			$curl = curl_init();
-			curl_setopt($curl, CURLOPT_URL,$url);
-			curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 1);
-			curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
-			curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-			curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
-			curl_setopt($curl, CURLOPT_MAXREDIRS, 10);
-			$rs = curl_exec($curl);
-			return $rs;
+			if($this->session->userdata('userid') > 0)
+			{
+				return "success";
+			}
+			else
+			{
+				$redirect_uri = urlencode(site_url("index/loginInWeixin?weixin=1"));
+				$url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid={$this->appid}&redirect_uri={$redirect_uri}&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect";
+				$curl = curl_init();
+				curl_setopt($curl, CURLOPT_URL,$url);
+				curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 1);
+				curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+				curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+				curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
+				curl_setopt($curl, CURLOPT_MAXREDIRS, 10);
+				$rs = curl_exec($curl);
+				return $rs;
+			}
+		}else{
+			if($this->session->userdata('userid') > 0)
+			{
+				return "success";
+			}else{
+				redirect("index/login");
+			}
 		}
 	}
 	
@@ -106,7 +118,6 @@ class index extends CI_Controller {
 			$type = "profile";
 		}
 		$this->data['type'] = $type;
-		
 		$this->data["error"] = "";
 		//微信
 		$loginResult = $this->needlogin();
@@ -255,12 +266,12 @@ class index extends CI_Controller {
 	
 	public function baodian()
 	{
-		if(isset($_GET['newsid']) && $_GET['newsid'] != ""){
-			$news = $this->db->query("select * from worker where id={$newsid}")->result_array();
-			$this->data['news'] = $news;
+		if(isset($_GET['id']) && $_GET['id'] != ""){
+			$news = $this->db->query("select * from news where id={$_GET['id']}")->result_array();
+			$this->data['news'] = $news[0];
 			$this->parser->parse('newsdetail',$this->data);
 		}else{
-			$news = $this->db->query("select * from worker")->result_array();
+			$news = $this->db->query("select * from news")->result_array();
 			$this->data['news'] = $news;
 			$this->parser->parse('newslist',$this->data);
 		}
@@ -286,6 +297,11 @@ class index extends CI_Controller {
 			$this->data['joinus'] = "暂时没有";
 		}
 		$this->parser->parse('joinus',$this->data);
+	}
+	
+	public function  findus()
+	{
+		$this->parser->parse('findus',$this->data);
 	}
 	
 }
