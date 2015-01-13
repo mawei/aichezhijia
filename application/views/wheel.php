@@ -6,7 +6,7 @@
 <div data-role="page">
 {header}
   <div data-role="content">
-  {joinus}
+  {wheel}
   
   </div>
 </div>

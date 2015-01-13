@@ -2,11 +2,13 @@
 <html>
 {head}
 <body>
+<div class="container">
+
 {header}
 <div data-role="page">
   
   <div class="jumbotron">
-  <center><h1><?=$news['title']?></h1></center>
+  <center><h3><?=$news['title']?></h3></center>
   <br/>
   <br/>
   	<p><?=$news['content']?></p>
@@ -14,6 +16,7 @@
   
 </div>
 {footer}
+</div>
 </body>
 </html>
 

@@ -123,8 +123,6 @@ class index extends CI_Controller {
 		$loginResult = $this->needlogin();
 		if($loginResult == 'success')
 		{
-			$query = $this->db->query("select * from `user` where id='1'");
-			$this->data['wheel'] = $query->result_array()[0]['wheel'];
 			$this->parser->parse('index',$this->data);
 		}elseif($loginResult != ''){
 			redirect("index/login?weixinID={$loginResult}");
@@ -134,8 +132,8 @@ class index extends CI_Controller {
 	public function login()
 	{
 		//微信登陆
-		$this->data['weixinID'] = $_GET['weixinID'];
-		$this->data['referurl'] = $_SERVER['HTTP_REFERER'];
+		$this->data['weixinID'] = isset($_GET['weixinID']) ? $_GET['weixinID'] :"";
+		$this->data['referurl'] = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : "index.php/index";
 		$this->data['error'] = "";
 		$this->parser->parse('login',$this->data);
 	}
@@ -161,6 +159,7 @@ class index extends CI_Controller {
 			{
 				$this->db->query("update `user` set weixinID='{$weixinID}' where id = {$query->result_array()[0]['id']}");
 			}
+			//print_r($referurl);die();
 			redirect($referurl);
 		}else{
 			$error = "请输入正确的用户名及密码";
@@ -289,7 +288,7 @@ class index extends CI_Controller {
 	
 	public function joinus()
 	{
-		$result = $this->db->query("select * from `config` where key='joinus'")->result_array();
+		$result = $this->db->query("select * from `config` where `key`='joinus'")->result_array();
 		if(count($result) > 0)
 		{
 			$this->data['joinus'] = $result[0]['value'];
@@ -301,7 +300,28 @@ class index extends CI_Controller {
 	
 	public function  findus()
 	{
+		$result = $this->db->query("select * from `config` where `key`='findus'")->result_array();
+		if(count($result) > 0)
+		{
+			$this->data['findus'] = $result[0]['value'];
+		}else{
+			$this->data['findus'] = "暂时没有";
+		}
 		$this->parser->parse('findus',$this->data);
+	}
+	
+	public function  wheel()
+	{
+		$loginResult = $this->needlogin();
+		if($loginResult == 'success')
+		{
+			$query = $this->db->query("select * from `user` where id={$this->session->userdata('userid')}");
+			$this->data['wheel'] = $query->result_array()[0]['wheel'];
+			$this->parser->parse('wheel',$this->data);
+		}elseif($loginResult != '')
+		{
+			redirect("index/login?weixinID={$loginResult}");
+		}
 	}
 	
 }

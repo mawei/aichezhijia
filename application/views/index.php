@@ -5,8 +5,8 @@
 
 <div data-role="page" id="pageone">
 {header}
-  <div data-role="content">
-<!--     <h2>我的资料</h2> -->
+<!--   <div data-role="content">
+    <h2>我的资料</h2>
   <?php if($type == "profile"): ?>
     <ul data-role="listview">
       <li><a href="#">我的轮胎<span class="ui-li-count">{wheel}</span></a></li>
@@ -17,7 +17,7 @@
     
     
   <?php endif;?>
-<!--     <h2>爱车师傅</h2> -->
+    <h2>爱车师傅</h2>
       <?php if($type == "worker"): ?>
     
     <ul data-role="listview">
@@ -28,7 +28,7 @@
     </ul>
       <?php endif;?>
     
-<!--     <h2>爱车导航</h2> -->
+    <h2>爱车导航</h2>
         <?php if($type == "daohang"): ?>
       
     <ul data-role="listview">
@@ -39,6 +39,7 @@
           <?php endif;?>
     
   </div>
+   -->
   {footer}
 </div> 
 

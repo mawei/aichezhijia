@@ -2,6 +2,7 @@
 <html>
 {head}
 <body>
+<div class="container">
 
 <div data-role="page">
   <div data-role="content">
@@ -11,7 +12,7 @@
     </form>
   </div>
 </div>
-
+</div>
 </body>
 </html>
 

@@ -2,13 +2,13 @@
 <html>
 {head}
 <body>
+<div class="container">
 
 <div data-role="page">
-  <div data-role="content">
-  {joinus}
-  </div>
+{header}
+{findus}
+ </div>
 </div>
-
 </body>
 </html>
 

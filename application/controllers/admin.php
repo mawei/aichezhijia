@@ -106,6 +106,36 @@ class Admin extends CI_Controller {
 		$this->load->view('UserManagement.php',$output);
 	}
 	
+	public function config()
+	{
+		$crud = new grocery_CRUD();
+		//$crud->set_theme('twitter-bootstrap');
+		$crud->set_table('config');
+		//$crud->columns('id','userid','itemname','quantity','price','total','shop','date');
+		//$crud->edit_fields('partner_id','name','sex','age','photo','type');
+		$crud->set_subject('网站设置');
+		$crud->display_as('key','字段');
+		$crud->display_as('alias','名称');
+		$crud->display_as('value','内容');
+	
+		$output = $crud->render();
+		$this->load->view('UserManagement.php',$output);
+	}
+	
+	public function news()
+	{
+		$crud = new grocery_CRUD();
+		$crud->set_table('news');
+		$crud->set_subject('新闻');
+		$crud->columns('content');
+		$crud->display_as('title','标题');
+		$crud->display_as('content','内容');
+	
+		$output = $crud->render();
+		$this->load->view('UserManagement.php',$output);
+	}
+	
+	
 	public function insurance()
 	{
 		$crud = new grocery_CRUD();
