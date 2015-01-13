@@ -99,7 +99,7 @@ class index extends CI_Controller {
 					redirect('index');
 // 					$result = 'success';
 				}else{
-					redirect("login?weixinID={$output->openid}");
+					redirect("index/login?weixinID={$output->openid}");
 // 					$result = $output->openid;
 				}
 			}
