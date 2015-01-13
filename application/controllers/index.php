@@ -59,15 +59,16 @@ class index extends CI_Controller {
 			{
 				$redirect_uri = urlencode(site_url("index/loginInWeixin?weixin=1"));
 				$url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid={$this->appid}&redirect_uri={$redirect_uri}&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect";
-				$curl = curl_init();
-				curl_setopt($curl, CURLOPT_URL,$url);
-				curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 1);
-				curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
-				curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-				curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
-				curl_setopt($curl, CURLOPT_MAXREDIRS, 10);
-				$rs = curl_exec($curl);
-				return $rs;
+				redirect($url);
+// 				$curl = curl_init();
+// 				curl_setopt($curl, CURLOPT_URL,$url);
+// 				curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 1);
+// 				curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+// 				curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+// 				curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
+// 				curl_setopt($curl, CURLOPT_MAXREDIRS, 10);
+// 				$rs = curl_exec($curl);
+// 				return $rs;
 			}
 		}else{
 			if($this->session->userdata('userid') > 0)
@@ -95,9 +96,11 @@ class index extends CI_Controller {
 				if(count($query->result_array())>0)
 				{
 					$this->session->set_userdata('userid', $query->result_array()[0]['id']);
-					$result = 'success';
+					redirect('index');
+// 					$result = 'success';
 				}else{
-					$result = $output->openid;
+					redirect("login?weixinID={$output->openid}");
+// 					$result = $output->openid;
 				}
 			}
 		}
