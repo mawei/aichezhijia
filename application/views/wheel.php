@@ -2,9 +2,10 @@
 <html>
 {head}
 <body>
+{header}
+
 <div class="container">
 <div data-role="page">
-{header}
   <div data-role="content">
   {wheel}
   

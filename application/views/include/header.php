@@ -1,3 +1,4 @@
+<header class="header fixed clearfix">
 <nav class="navbar navbar-default navbar-fixed-top noBorder" role="navigation">
 			<div class="container">
 				
@@ -52,3 +53,4 @@
 				
 			</div>
 		</nav>
+		</header>
