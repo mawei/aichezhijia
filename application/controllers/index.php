@@ -222,7 +222,7 @@ class index extends CI_Controller {
 		$this->parser->parse('complete_profile',$this->data);
 	}
 	
-	public function complete_profile()
+	public function complete_profile_post()
 	{
 		$wheel = addslashes($_POST['wheel']);
 		$carmodel = addslashes($_POST['carmodel']);
