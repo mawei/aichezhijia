@@ -46,6 +46,5 @@ $route['weixin'] = "weixin";
 $route['404_override'] = '';
 $route['examples'] = "examples/index";
 
-
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */

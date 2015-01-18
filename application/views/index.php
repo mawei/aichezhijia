@@ -14,8 +14,6 @@
       <li><a href="<?php echo site_url('index/insurancelist') ?>">我的保险</a></li>
       <li> <a href="<?php echo site_url('index/loginout') ?>">退出</a></li>
     </ul>
-    
-    
   <?php endif;?>
     <h2>爱车师傅</h2>
       <?php if($type == "worker"): ?>

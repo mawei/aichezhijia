@@ -7,10 +7,16 @@
 </head>
 <body class="templatemo-bg-gray">
 	<div class="container">
-	  	<?php echo $error;?>
 		<div class="col-md-12">
 			<h1 class="margin-bottom-15">注册</h1>
 			<form class="form-horizontal templatemo-container templatemo-login-form-1 margin-bottom-30" role="form" method="post" action="<?php echo site_url("index/registerpost");?>" data-ajax="false">				
+        		<div class="form-group">
+        		<div class="col-xs-12">		            
+		            <div class="control-wrapper">
+		        	<font style="color: red"><?php echo $error;?></font>
+		        	</div>
+		        	</div>
+		        </div>
 		        <div class="form-group">
 		          <div class="col-xs-12">		            
 		            <div class="control-wrapper">

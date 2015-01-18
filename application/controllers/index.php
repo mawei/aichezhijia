@@ -96,7 +96,7 @@ class index extends CI_Controller {
 				if(count($query->result_array())>0)
 				{
 					$this->session->set_userdata('userid', $query->result_array()[0]['id']);
-					redirect('index');
+					redirect('profile');
 // 					$result = 'success';
 				}else{
 					redirect("index/login?weixinID={$output->openid}");
@@ -164,7 +164,12 @@ class index extends CI_Controller {
 				$this->db->query("update `user` set weixinID='{$weixinID}' where id = {$query->result_array()[0]['id']}");
 			}
 			//print_r($referurl);die();
-			redirect("index");
+			if($query->result_array()[0]['type'] == 'admin')
+			{
+				redirect(site_url("admin/user"));
+			}else{
+				redirect("index");
+			}
 		}else{
 			$error = "请输入正确的用户名及密码";
 			$this->data['error'] = $error;
@@ -212,9 +217,38 @@ class index extends CI_Controller {
 		}
 	}
 	
+	public function complete_profile()
+	{
+		$this->parser->parse('complete_profile',$this->data);
+	}
+	
+	public function complete_profile()
+	{
+		$wheel = addslashes($_POST['wheel']);
+		$carmodel = addslashes($_POST['carmodel']);
+		if($wheel == "" || $carmodel=="")
+		{
+			$error = "请输入完整";
+			$this->data['error'] = $error;
+			$this->parser->parse('complete_profile',$this->data);
+		}
+		else
+		{
+			$query = $this->db->query("select * from `user` where username='{$username}'");
+			if(count($query->result_array())>0)
+			{
+				$error = "用户名已存在";
+				$this->data['error'] = $error;
+				$this->parser->parse('register',$this->data);
+			}else{
+				$query = $this->db->query("update `user` (carmodel,wheel) values ('{$carmodel}','{$wheel}')");
+				redirect('index/login');
+			}
+		}
+	}
+	
 	public function weihulist()
 	{
-		
 		$loginResult = $this->needlogin();
 		if($loginResult == 'success')
 		{

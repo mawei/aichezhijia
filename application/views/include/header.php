@@ -15,7 +15,7 @@
 				<div class="collapse navbar-collapse noPadding"	id="myNavbar">
 					<div class="navbar-right menustyle">
 						<ul class="nav navbar-nav">
-							<li><a href="index"><p>首页</p></a></li>
+							<li><a href="<?=site_url('index/index')?>"><p>首页</p></a></li>
 							<li class="dropdown">
 						        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">泉林师傅 <b class="caret"></b></a>
 						        <ul class="dropdown-menu">
