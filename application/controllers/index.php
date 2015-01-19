@@ -123,13 +123,19 @@ class index extends CI_Controller {
 		$this->data['type'] = $type;
 		$this->data["error"] = "";
 		//微信
-		$loginResult = $this->needlogin();
-		if($loginResult == 'success')
+		if(self::is_weixin())
 		{
+			$loginResult = $this->needlogin();
+			if($loginResult == 'success')
+			{
+				$this->parser->parse('index',$this->data);
+			}elseif($loginResult != ''){
+				redirect("index/login?weixinID={$loginResult}");
+			}
+		}else{
 			$this->parser->parse('index',$this->data);
-		}elseif($loginResult != ''){
-			redirect("index/login?weixinID={$loginResult}");
 		}
+		
 	}
 	
 	public function login()
