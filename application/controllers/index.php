@@ -26,6 +26,8 @@ class index extends CI_Controller {
 		$this->load->library('parser');
 		$this->load->helper('text');
 		
+		header("Content-type:text/html;charset=utf-8");
+		
 		$this->appid = "wx13facdc7a21c75b6";
 		$this->secret = "8ceb383fc897603a7edeab04c5311d37";
 		$this->weixinID = "";
@@ -359,19 +361,41 @@ class index extends CI_Controller {
 		$this->parser->parse('findus',$this->data);
 	}
 	
-	public function  wheel()
+	public function  profile()
 	{
 		$loginResult = $this->needlogin();
 		if($loginResult == 'success')
 		{
 			$query = $this->db->query("select * from `user` where id={$this->session->userdata('userid')}");
-			$this->data['wheel'] = $query->result_array()[0]['wheel'];
-			$this->parser->parse('wheel',$this->data);
+			$this->data['user'] = $query->result_array();
+			$this->parser->parse('profile',$this->data);
 		}elseif($loginResult != '')
 		{
 			redirect("index/login?weixinID={$loginResult}");
 		}
 	}
+	
+	public function  editprofile()
+	{
+		$loginResult = $this->needlogin();
+		if($loginResult == 'success')
+		{
+			if(isset($_POST['name']))
+			{
+				$name = $_POST['name'];
+				$phone = $_POST['phone'];
+				$carmodel = $_POST['carmodel'];
+				$wheel = $_POST['wheel'];
+				$this->db->query("update `user` set name='{$name}',phone='{$phone}',carmodel='{$carmodel}',wheel='{$wheel}' where id={$this->session->userdata('userid')}");
+				redirect("index/profile");
+			}else{
+				$query = $this->db->query("select * from `user` where id={$this->session->userdata('userid')}");
+				$this->data['user'] = $query->result_array();
+				$this->parser->parse('editprofile',$this->data);
+			}
+		}
+	}
+	
 	
 }
 

@@ -38,8 +38,8 @@
 |
 */
 
-$route['default_controller'] = "welcome";
-$route['index'] = "index";
+$route['default_controller'] = "index/profile";
+$route['index'] = "index/profile";
 $route['admin'] = "admin";
 $route['site'] = "site";
 $route['weixin'] = "weixin";
