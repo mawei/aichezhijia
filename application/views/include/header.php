@@ -40,7 +40,7 @@
 						    <li class="dropdown">
 						        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">我的资料 <b class="caret"></b></a>
 						        <ul class="dropdown-menu">
-						          <li><a href="<?=site_url('index/wheel')?>">轮胎</a></li>
+						          <li><a href="<?=site_url('index/profile')?>">我的资料</a></li>
 						          <li><a href="<?=site_url('index/insurancelist')?>">保险</a></li>
 						          <li><a href="<?=site_url('index/weihulist')?>">维护</a></li>
 						          <li class="divider"></li>

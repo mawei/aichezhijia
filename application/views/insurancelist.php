@@ -13,7 +13,7 @@
 
   <div class="col-sm-6 col-md-4">
     <div class="thumbnail">
-      <img data-src="{image}" alt="...">
+      <img src="{image}" alt="暂无图片">
       <div class="caption">
         <h3>保单照片</h3>
       </div>
@@ -21,7 +21,7 @@
   </div>
   <div class="col-sm-6 col-md-4">
     <div class="thumbnail">
-      <img data-src="{ID_front_image}" alt="...">
+      <img src="{ID_front_image}" alt="暂无图片">
       <div class="caption">
         <h3>身份证正面</h3>
       </div>
@@ -29,7 +29,7 @@
   </div>
   <div class="col-sm-6 col-md-4">
     <div class="thumbnail">
-      <img data-src="{ID_back_image}" alt="...">
+      <img src="{ID_back_image}" alt="暂无图片">
       <div class="caption">
         <h3>身份证反面</h3>
       </div>
@@ -37,7 +37,7 @@
   </div>
   <div class="col-sm-6 col-md-4">
     <div class="thumbnail">
-      <img data-src="{bank_image}" alt="...">
+      <img src="{bank_image}" alt="暂无图片">
       <div class="caption">
         <h3>银行理赔卡照片</h3>
       </div>
