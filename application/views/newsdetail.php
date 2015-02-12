@@ -13,7 +13,6 @@
   <br/>
   	<p><?=$news['content']?></p>
   </div>
-  
 </div>
 {footer}
 </div>
