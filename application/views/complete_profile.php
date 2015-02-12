@@ -35,5 +35,6 @@
 		      </form>
 		</div>
 	</div>
+	{footer}
 </body>
 </html>

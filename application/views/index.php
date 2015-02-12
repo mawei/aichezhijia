@@ -47,8 +47,9 @@
 <!-- 	<label for="username">用户名</label><input type="text" name="username" class="placeholder" placeholder="me@tutsplus.com"> -->
 <!-- 	<label for="password">密码</label><input type="password" name="password" class="placeholder" placeholder="password"> -->
 <!-- 	<input type="submit" value="Log In"> -->
-
+{footer}
 </body>
+
 </html>
 
 
