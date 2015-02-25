@@ -54,7 +54,7 @@ class Admin extends CI_Controller {
 		
 		$crud->set_subject('用户');
 		$output = $crud->render();	
-		$this->load->view('UserManagement.php',$output);
+		$this->load->view('UserManagement',$output);
 	}
 	
 	public function appointment()
@@ -66,7 +66,7 @@ class Admin extends CI_Controller {
 		$crud->display_as('workerid','师傅');
 		$crud->set_relation('workerid','worker','name');
 		$output = $crud->render();
-		$this->load->view('UserManagement.php',$output);
+		$this->load->view('UserManagement',$output);
 	}
 	
 	public function worker()
@@ -82,7 +82,7 @@ class Admin extends CI_Controller {
 		$crud->display_as('image','照片');
 		$crud->set_field_upload('image','assets/uploads/files');
 		$output = $crud->render();
-		$this->load->view('UserManagement.php',$output);
+		$this->load->view('UserManagement',$output);
 	}
 	
 	public function maintenance_record()
@@ -103,7 +103,7 @@ class Admin extends CI_Controller {
 		$crud->set_relation('userid','user','username');
 		
 		$output = $crud->render();
-		$this->load->view('UserManagement.php',$output);
+		$this->load->view('UserManagement',$output);
 	}
 	
 	public function config()
@@ -119,7 +119,7 @@ class Admin extends CI_Controller {
 		$crud->display_as('value','内容');
 	
 		$output = $crud->render();
-		$this->load->view('UserManagement.php',$output);
+		$this->load->view('UserManagement',$output);
 	}
 	
 	public function news()
@@ -131,7 +131,7 @@ class Admin extends CI_Controller {
 		$crud->display_as('content','内容');
 	
 		$output = $crud->render();
-		$this->load->view('UserManagement.php',$output);
+		$this->load->view('UserManagement',$output);
 	}
 	
 	public function suggest()
@@ -143,7 +143,7 @@ class Admin extends CI_Controller {
 		$crud->display_as('userid','用户');
 		$crud->set_relation('userid','user','username');
 		$output = $crud->render();
-		$this->load->view('UserManagement.php',$output);
+		$this->load->view('UserManagement',$output);
 	}
 	
 	
@@ -170,7 +170,7 @@ class Admin extends CI_Controller {
 		
 		
 		$output = $crud->render();
-		$this->load->view('UserManagement.php',$output);
+		$this->load->view('UserManagement',$output);
 	}
 	
 }
