@@ -21,6 +21,7 @@ foreach($css_files as $file): ?>
 	<script src="<?php echo $file; ?>"></script>
 <?php endforeach; ?>
 		
+		
 	</head>
 	<body>
 <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
