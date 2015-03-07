@@ -85,7 +85,7 @@ class index extends CI_Controller {
 	public function loginInWeixin()
 	{
 		$result = "";
-		if($_REQUEST['code'] != "")
+		if(isset($_REQUEST['code']) && $_REQUEST['code'] != "")
 		{
 			$url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid={$this->appid}&secret={$this->secret}&code={$_REQUEST['code']}&grant_type=authorization_code";
 			$ch = curl_init($url) ;
