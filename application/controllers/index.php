@@ -88,10 +88,14 @@ class index extends CI_Controller {
 		if(isset($_REQUEST['code']) && $_REQUEST['code'] != "")
 		{
 			$url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid={$this->appid}&secret={$this->secret}&code={$_REQUEST['code']}&grant_type=authorization_code";
-			$ch = curl_init($url) ;
-			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true) ; // 获取数据返回
-			curl_setopt($ch, CURLOPT_BINARYTRANSFER, true) ; // 在启用 CURLOPT_RETURNTRANSFER 时候将获取数据返回
-			$output = json_decode(curl_exec($ch)) ;
+			$curl = curl_init();
+			curl_setopt($curl, CURLOPT_URL,$url);
+			curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);
+			curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+			curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+			curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
+			curl_setopt($curl, CURLOPT_MAXREDIRS, 10);
+			$output = json_decode(curl_exec($curl)) ;
 			if($output->openid != "")
 			{
 				$query = $this->db->query("select * from `user` where weixinID='{$output->openid}'");
@@ -167,7 +171,7 @@ class index extends CI_Controller {
 		if(count($query->result_array())>0)
 		{
 			$this->session->set_userdata('userid', $query->result_array()[0]['id']);
-			if($weixinID != "")
+			if($weixinID != "" && $weixinID != "{weixinID}")
 			{
 				$this->db->query("update `user` set weixinID='{$weixinID}' where id = {$query->result_array()[0]['id']}");
 			}
@@ -206,10 +210,10 @@ class index extends CI_Controller {
 		$username = addslashes($_POST['username']);
 		$password = addslashes($_POST['password']);
 		$password2 = addslashes($_POST['password2']);
-		$phone = addslashes($_POST['phone']);
-		$carmodel = addslashes($_POST['carmodel']);
+		$phone = addslashes($_POST['username']);
+		//$carmodel = addslashes($_POST['carmodel']);
 		
-		if($username == "" || $password==""||$password2==""||$phone==""||$carmodel=="")
+		if($username == "" || $password==""||$password2=="")
 		{
 			$error = "请输入完整";
 			$this->data['error'] = $error;
@@ -229,7 +233,7 @@ class index extends CI_Controller {
 				$this->data['error'] = $error;
 				$this->parser->parse('register',$this->data);
 			}else {
-				$query = $this->db->query("insert into `user` (username,password,phone,carmodel) values ('{$username}','{$password}','{$phone}','{$carmodel}')");
+				$query = $this->db->query("insert into `user` (username,password,phone) values ('{$username}','{$password}','{$phone}')");
 				redirect('index/login');
 			}
 		}
@@ -283,7 +287,7 @@ class index extends CI_Controller {
 	{
 		$loginResult = $this->needlogin();
 		$records = $this->db->query("select * from shop");
-		$this->data['records'] = $records->result_array();
+		$this->data['shops'] = $records->result_array();
 		$this->parser->parse('shoplist',$this->data);
 	}
 	

@@ -24,6 +24,10 @@
         <a class="am-list-item-hd " onclick="javascript:void(0);">轮胎</a>
         <span class="am-list-date">{wheel}</span>
       </li>
+      <li class="am-g am-list-item-dated">
+        <a class="am-list-item-hd " onclick="javascript:void(0);">车牌</a>
+        <span class="am-list-date">{chepai}</span>
+      </li>
       {/user}
     </ul>
   </div>

@@ -59,7 +59,8 @@ foreach($css_files as $file): ?>
               <li class="active"><a href="#">Overview</a></li>
                 <li><a href='<?php echo site_url('admin/user')?>'>用户管理</a></li>
 				<li><a href='<?php echo site_url('admin/worker')?>'>师傅管理</a></li>
-				<li><a href='<?php echo site_url('admin/maintenance_record')?>'>保养记录管理</a></li>
+                <li><a href='<?php echo site_url('admin/shop')?>'>分店管理</a></li>
+   				<li><a href='<?php echo site_url('admin/maintenance_record')?>'>保养记录管理</a></li>
 				<li><a href='<?php echo site_url('admin/insurance')?>'>保险管理</a></li>
 				<li><a href='<?php echo site_url('admin/appointment')?>'>预约管理</a></li>
 				<li><a href='<?php echo site_url('admin/news')?>'>新闻管理</a></li>

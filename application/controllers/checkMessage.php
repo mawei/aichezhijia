@@ -123,8 +123,7 @@ class checkMessage extends CI_Controller
 		$output = curl_exec ( $ch );
 		
 		$output_array = json_decode ( $output, true );
-		echo $info['weixinID'];
-		print_r($output_array);
+		
 		curl_close ( $ch );
 		// 打印获得的数据
 		$msgid = $output_array['errcode'] == "0" ?  $output_array['msgid'] : "";
@@ -183,6 +182,9 @@ class checkMessage extends CI_Controller
 	
 	public function saveMessage($openid,$message_id,$templete_id,$status)
 	{
+		echo $openid;
+		print_r($status);
+		
 		$message['openid'] = $openid;
 		$message['message_id'] = $message_id;
 		$message['template_id'] = $templete_id;
@@ -206,7 +208,7 @@ class checkMessage extends CI_Controller
 	
 	private function checkMaintanceExpire()
 	{
-		$sql = "select * from user where DATEDIFF(next_baoyang_date,NOW()) > 7";
+		$sql = "select * from user where DATEDIFF(next_baoyang_date,NOW()) = 7";
 		$result = $this->db->query($sql)->result_array();
 		foreach ($result as $r)
 		{
@@ -216,7 +218,7 @@ class checkMessage extends CI_Controller
 	
 	private function checkBaoxianExpire()
 	{
-		$sql = "select * from user where DATEDIFF(next_baoxian_date,NOW()) > 30";
+		$sql = "select * from user where DATEDIFF(next_baoxian_date,NOW()) = 30";
 		$result = $this->db->query($sql)->result_array();
 		foreach ($result as $r)
 		{

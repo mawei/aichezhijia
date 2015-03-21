@@ -72,7 +72,6 @@ class Admin extends CI_Controller {
 	public function worker()
 	{
 		$crud = new grocery_CRUD();
-		$crud->set_theme('datatables');
 		$crud->set_table('worker');
  		$crud->columns('id','name','phone');
 		//$crud->edit_fields('partner_id','name','sex','age','photo','type');
@@ -81,6 +80,20 @@ class Admin extends CI_Controller {
 		$crud->display_as('phone','手机号');
 		$crud->display_as('image','照片');
 		$crud->set_field_upload('image','assets/uploads/files');
+		$output = $crud->render();
+		$this->load->view('UserManagement',$output);
+	}
+	
+	public function shop()
+	{
+		$crud = new grocery_CRUD();
+		$crud->set_table('shop');
+		$crud->columns('id','name','phone','address');
+		//$crud->edit_fields('partner_id','name','sex','age','photo','type');
+		$crud->set_subject('分店');
+		$crud->display_as('name','名称');
+		$crud->display_as('phone','手机号');
+		$crud->display_as('address','地址');
 		$output = $crud->render();
 		$this->load->view('UserManagement',$output);
 	}
@@ -155,7 +168,7 @@ class Admin extends CI_Controller {
 		$crud->set_table('insurance');
 		$crud->columns('id','userid','image');
 		//$crud->edit_fields('partner_id','name','sex','age','photo','type');
-		$crud->set_subject('维修记录');
+		$crud->set_subject('保险记录');
 		$crud->display_as('userid','用户名');
 		$crud->display_as('image','保单照片');
 		$crud->display_as('ID_front_image','身份证正面');

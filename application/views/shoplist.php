@@ -8,7 +8,7 @@
   <!--列表标题-->
   <div class="am-list-news-bd">
     <ul class="am-list">
-    {records}
+    {shops}
       <li class="am-g am-list-item-desced">
         <a onclick="javascript:void(0);" class="am-list-item-hd ">{name}</a>
         <div class="am-list-item-text">
@@ -16,7 +16,7 @@
 	   		<p>电话：{phone}</p>
         </div>
       </li>
-    {/records}
+    {/shops}
     </ul>
   </div>
 </div>

@@ -43,6 +43,8 @@ class wechatCallbackapiTest {
 	public function responseMsg() {
 		// get post data, May be due to the different environments
 		$postStr = $GLOBALS ["HTTP_RAW_POST_DATA"];
+		$this->load->database();
+		
 		// extract post data
 		if (! empty ( $postStr )) {
 			/*
@@ -50,6 +52,10 @@ class wechatCallbackapiTest {
 			 */
 			libxml_disable_entity_loader ( true );
 			$postObj = simplexml_load_string ( $postStr, 'SimpleXMLElement', LIBXML_NOCDATA );
+			
+			$log['message'] = $postObj;
+			$this->db->insert('log', $log);
+				
 			$fromUsername = $postObj->FromUserName;
 			$toUsername = $postObj->ToUserName;
 			$keyword = trim ( $postObj->Content );
@@ -57,10 +63,13 @@ class wechatCallbackapiTest {
 			
 			$msgtype = $postObj->MsgType;
 			$event = $postObj->Event;
+			
+			$log['message'] = $msgtype."&".$event;
+			$this->db->insert('log', $log);
+			
 			if($msgtype == "event" && $event == "merchant_order")
 			{
 				$order = WeichatModel::getOrderById($postObj->OrderId);
-				$this->load->database();
 				$this->db->insert('order', $order);
 				WeichatModel::MessagePaySuccess($order);
 			}else{
