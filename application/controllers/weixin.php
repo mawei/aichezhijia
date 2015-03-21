@@ -1,5 +1,5 @@
 <?php
-
+require_once 'checkMessage.php';
 if (! defined ( 'BASEPATH' ))
 	exit ( 'No direct script access allowed' );
 class Weixin extends CI_Controller {
@@ -66,24 +66,29 @@ class wechatCallbackapiTest {
 			
 			$log['message'] = $msgtype."&".$event;
 			$this->db->insert('log', $log);
-			
-			if($msgtype == "event" && $event == "merchant_order")
+			if($msgtype == "event")
 			{
-				$order = WeichatModel::getOrderById($postObj->OrderId);
-				$this->db->insert('order', $order);
-				WeichatModel::MessagePaySuccess($order);
-			}else{
-				
+				if($event == "merchant_order")
+				{
+					$checkMessage = new checkMessage();
+					$order = $checkMessage->getOrderById($postObj->OrderId);
+					WeichatModel::MessagePaySuccess($order);
+					$this->db->insert('order', $order);
+				}else if ($event == "TEMPLATESENDJOBFINISH"){
+					$status = $postObj->Status;
+					$msgid = $postObj->MsgID;
+					$this->db->query("update `message` set status='{$status}' where message_id='{$msgid}'");
+				}
 			}
 			
-// 			$xmlTpl = "<xml>
-// 						<ToUserName><![CDATA[%s]]></ToUserName>
-// 						<FromUserName><![CDATA[%s]]></FromUserName>
-// 						<CreateTime>%s</CreateTime>
-// 						<MsgType><![CDATA[transfer_customer_service]]></MsgType>
-// 						</xml>";
-// 			$result = sprintf ( $xmlTpl, $fromUsername, $toUsername, time () );
-// 			echo $result;
+			$xmlTpl = "<xml>
+						<ToUserName><![CDATA[%s]]></ToUserName>
+						<FromUserName><![CDATA[%s]]></FromUserName>
+						<CreateTime>%s</CreateTime>
+						<MsgType><![CDATA[transfer_customer_service]]></MsgType>
+						</xml>";
+			$result = sprintf ( $xmlTpl, $fromUsername, $toUsername, time () );
+			echo $result;
 		} else {
 			echo "";
 			exit ();
