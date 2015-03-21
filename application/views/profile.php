@@ -3,31 +3,44 @@
 {head}
 <body>
 {header}
-
-<div class="container">
-<div data-role="page">
-  <div data-role="content">
-<button type="button" class="btn btn-primary btn-lg">
-  <span class="glyphicon glyphicon-user"></span> 用户资料
-</button>
-<br/>
-<br/>
-<ul class="list-group">
-      {user}
-    <li class="list-group-item">姓名：{name}</li>
-    <li class="list-group-item">电话：{phone}</li>
-    <li class="list-group-item">车型：{carmodel}</li>
-    <li class="list-group-item">轮胎：{wheel}</li>
-    {/user}
-    <br/>
-    <a class="btn btn-default" href="<?=site_url('index/editprofile')?>" role="button">编辑</a>
-       
-  </ul>
+<div class="box">
+<div data-am-widget="list_news" class="am-list-news am-list-news-default">
+  <div class="am-list-news-bd">
+    <ul class="am-list">
+    {user}
+      <li class="am-g am-list-item-dated">
+        <a class="am-list-item-hd " onclick="javascript:void(0);">姓名</a>
+        <span class="am-list-date">{name}</span>
+      </li>
+      <li class="am-g am-list-item-dated">
+        <a class="am-list-item-hd " onclick="javascript:void(0);">电话</a>
+        <span class="am-list-date">{phone}</span>
+      </li>
+      <li class="am-g am-list-item-dated">
+        <a class="am-list-item-hd " onclick="javascript:void(0);">车型</a>
+        <span class="am-list-date">{carmodel}</span>
+      </li>
+      <li class="am-g am-list-item-dated">
+        <a class="am-list-item-hd " onclick="javascript:void(0);">轮胎</a>
+        <span class="am-list-date">{wheel}</span>
+      </li>
+      {/user}
+    </ul>
   </div>
 </div>
 </div>
-{footer}
+
+
+	<div data-am-widget="navbar" class="am-navbar am-cf am-navbar-default" id="">
+	  <ul class="am-navbar-nav am-cf am-avg-sm-4">
+	    <li>
+	      <a href="<?=site_url('index/editprofile')?>" class="">
+	        <span class="am-icon-location-arrow"></span>
+	        <span class="am-navbar-label">修改资料</span>
+	      </a>
+	    </li>
+	  </ul>
+	</div>
+	{footer}
 </body>
 </html>
-
-

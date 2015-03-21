@@ -168,7 +168,6 @@ class Admin extends CI_Controller {
 		$crud->set_field_upload('bank_image','assets/uploads/files');
 		$crud->set_field_upload('image','assets/uploads/files');
 		
-		
 		$output = $crud->render();
 		$this->load->view('UserManagement',$output);
 	}

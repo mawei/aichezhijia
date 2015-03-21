@@ -2,17 +2,13 @@
 <html>
 {head}
 <body>
-<div class="container">
-
-<div data-role="page">
 {header}
-<div class="col-xs-12 col-md-12">		            
 
+<article data-am-widget="paragraph" class="am-paragraph am-paragraph-default"
+data-am-paragraph="{ tableScrollable: true, pureview: true }">
 {findus}
-</div>
- </div>
-</div>
-</body>
+</article>
+
 {footer}
 </html>
 

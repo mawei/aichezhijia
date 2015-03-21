@@ -2,16 +2,14 @@
 <html>
 {head}
 <body>
-<div class="container">
-<div data-role="page">
 {header}
-  <div data-role="content">
-  {joinus}
-  
-  </div>
-</div>
-</div>
 
+<article data-am-widget="paragraph" class="am-paragraph am-paragraph-default"
+data-am-paragraph="{ tableScrollable: true, pureview: true }">
+  {joinus}
+
+</article>
+  
 {footer}
 </body>
 </html>

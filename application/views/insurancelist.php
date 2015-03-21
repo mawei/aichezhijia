@@ -2,55 +2,56 @@
 <html>
 {head}
 <body>
-<div class="container">
 
-<div data-role="page">
 {header}
-  <div data-role="content">
-  
-<div class="row">
   	{records}
 
-  <div class="col-sm-6 col-md-4">
-    <div class="thumbnail">
-      <img src="{image}" alt="暂无图片">
-      <div class="caption">
-        <h3>保单照片</h3>
-      </div>
-    </div>
-  </div>
-  <div class="col-sm-6 col-md-4">
-    <div class="thumbnail">
-      <img src="{ID_front_image}" alt="暂无图片">
-      <div class="caption">
-        <h3>身份证正面</h3>
-      </div>
-    </div>
-  </div>
-  <div class="col-sm-6 col-md-4">
-    <div class="thumbnail">
-      <img src="{ID_back_image}" alt="暂无图片">
-      <div class="caption">
-        <h3>身份证反面</h3>
-      </div>
-    </div>
-  </div>
-  <div class="col-sm-6 col-md-4">
-    <div class="thumbnail">
-      <img src="{bank_image}" alt="暂无图片">
-      <div class="caption">
-        <h3>银行理赔卡照片</h3>
-      </div>
-    </div>
-  </div>
-  {/records}
-</div>
   
-  </div>
+  <ul data-am-widget="gallery" class="am-gallery am-avg-sm-2
+  am-avg-md-3 am-avg-lg-4 am-gallery-overlay" data-am-gallery="{ pureview: true }">
+  <li>
+    <div class="am-gallery-item">
+      <a href="{image}"
+      class="">
+        <img src="{image}"
+         />
+        <h3 class="am-gallery-title">保单照片</h3>
+      </a>
+    </div>
+  </li>
+  <li>
+    <div class="am-gallery-item">
+      <a href="{ID_front_image}"
+      class="">
+        <img src="{ID_front_image}"
+         />
+        <h3 class="am-gallery-title">身份证正面</h3>
+      </a>
+    </div>
+  </li>
+  <li>
+    <div class="am-gallery-item">
+      <a href="{ID_back_image}"
+      class="">
+        <img src="{ID_back_image}"
+         />
+        <h3 class="am-gallery-title">身份证反面</h3>
+      </a>
+    </div>
+  </li>
+  <li>
+    <div class="am-gallery-item">
+      <a href="{bank_image}"
+      class="">
+        <img src="{bank_image}"
+         />
+        <h3 class="am-gallery-title">银行理赔卡照片</h3>
+      </a>
+    </div>
+  </li>
+</ul>
+  {/records}
 
-</div>
-</div>
-{footer}
 </body>
 </html>
 

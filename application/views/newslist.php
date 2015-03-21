@@ -3,20 +3,21 @@
 {head}
 <body>
 {header}
-<div class="container">
-<div data-role="page">
-  <div data-role="content">
-  
-  	<div class="list-group">
-		<? foreach ($news as $n):?>
-			<a href="<?=site_url('index/baodian?id=')?><?=$n['id']?>" class="list-group-item">
-		    <h4 class="list-group-item-heading"><?=$n['title']?></h4>
-	   		</a>
-		<?endforeach;?>
-	</div>
+{news}
+
+<div data-am-widget="list_news" class="am-list-news am-list-news-default">
+  <!--列表标题-->
+  <div class="am-list-news-bd">
+    <ul class="am-list">
+      <li class="am-g am-list-item-dated">
+        <a href="<?=site_url('index/baodian?id=')?>{id}" class="am-list-item-hd ">{title}</a>
+        <span class="am-list-date">{create_date}</span>
+      </li>
+    </ul>
   </div>
 </div>
-</div>
+
+{/news}
 {footer}
 </body>
 </html>

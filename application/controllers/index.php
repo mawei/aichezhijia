@@ -111,18 +111,18 @@ class index extends CI_Controller {
 	
 	public function index()
 	{
-		if(isset($_GET['type']))
-		{
-			if($_GET['type'] == "")
-			{
-				$type = "profile";
-			}else{
-				$type = $_GET['type'];
-			}
-		}else{
-			$type = "profile";
-		}
-		$this->data['type'] = $type;
+// 		if(isset($_GET['type']))
+// 		{
+// 			if($_GET['type'] == "")
+// 			{
+// 				$type = "profile";
+// 			}else{
+// 				$type = $_GET['type'];
+// 			}
+// 		}else{
+// 			$type = "profile";
+// 		}
+// 		$this->data['type'] = $type;
 		$this->data["error"] = "";
 		//微信
 		if(self::is_weixin())
@@ -189,6 +189,16 @@ class index extends CI_Controller {
 	{
 		$this->data['error'] = "";
 		$this->parser->parse('register',$this->data);
+	}
+	
+	public function usercenter()
+	{
+		$this->parser->parse('usercenter',$this->data);
+	}
+	
+	public function aboutus()
+	{
+		$this->parser->parse('aboutus',$this->data);
 	}
 	
 	public function registerpost()
@@ -269,6 +279,14 @@ class index extends CI_Controller {
 		}
 	}
 	
+	public function shoplist()
+	{
+		$loginResult = $this->needlogin();
+		$records = $this->db->query("select * from shop");
+		$this->data['records'] = $records->result_array();
+		$this->parser->parse('shoplist',$this->data);
+	}
+	
 	public function insurancelist(){
 		$loginResult = $this->needlogin();
 		if($loginResult == 'success')
@@ -313,10 +331,37 @@ class index extends CI_Controller {
 	{
 		if(isset($_GET['id']) && $_GET['id'] != ""){
 			$news = $this->db->query("select * from news where id={$_GET['id']}")->result_array();
-			$this->data['news'] = $news[0];
+			$this->data['news'] = $news;
 			$this->parser->parse('newsdetail',$this->data);
 		}else{
-			$news = $this->db->query("select * from news")->result_array();
+			$news = $this->db->query("select * from news where type='养车宝典'")->result_array();
+			$this->data['news'] = $news;
+			$this->parser->parse('newslist',$this->data);
+		}
+	}
+	
+	public function order()
+	{
+		$loginResult = $this->needlogin();
+		if($loginResult == 'success')
+		{
+			$orders = $this->db->query("select t1.* from `order` t1 left join user t2 on t1.buyer_openid = t2.weixinID where t2.id={$this->session->userdata('userid')}");
+			$this->data['orders'] = $orders->result_array();
+			$this->parser->parse('orderlist',$this->data);
+		}elseif($loginResult != '')
+		{
+			redirect("index/login?weixinID={$loginResult}");
+		}
+	}
+	
+	public function activity()
+	{
+		if(isset($_GET['id']) && $_GET['id'] != ""){
+			$news = $this->db->query("select * from news where id={$_GET['id']}")->result_array();
+			$this->data['news'] = $news;
+			$this->parser->parse('newsdetail',$this->data);
+		}else{
+			$news = $this->db->query("select * from news where type='活动'")->result_array();
 			$this->data['news'] = $news;
 			$this->parser->parse('newslist',$this->data);
 		}
@@ -375,6 +420,45 @@ class index extends CI_Controller {
 		}
 	}
 	
+	public function  service()
+	{
+		$loginResult = $this->needlogin();
+		if($loginResult == 'success')
+		{
+			$query = $this->db->query("select * from `user` where id={$this->session->userdata('userid')}");
+			$this->data['user'] = $query->result_array();
+			$this->parser->parse('service',$this->data);
+		}elseif($loginResult != '')
+		{
+			redirect("index/login?weixinID={$loginResult}");
+		}
+	}
+	
+	public function  editservice()
+	{
+		$loginResult = $this->needlogin();
+		if($loginResult == 'success')
+		{
+			if(isset($_POST['last_baoxian_date']))
+			{
+				$last_baoxian_date = $_POST['last_baoxian_date'];
+				$next_baoxian_date = $_POST['next_baoxian_date'];
+				$last_baoyang_date = $_POST['last_baoyang_date'];
+				$next_baoyang_date = $_POST['next_baoyang_date'];
+				$this->db->query("update `user` set 
+						last_baoxian_date='{$last_baoxian_date}',
+						next_baoxian_date='{$next_baoxian_date}',
+						last_baoyang_date='{$last_baoyang_date}',
+						next_baoyang_date='{$next_baoyang_date}' where id={$this->session->userdata('userid')}");
+				redirect("index/service");
+			}else{
+				$query = $this->db->query("select * from `user` where id={$this->session->userdata('userid')}");
+				$this->data['user'] = $query->result_array();
+				$this->parser->parse('editservice',$this->data);
+			}
+		}
+	}
+		
 	public function  editprofile()
 	{
 		$loginResult = $this->needlogin();
