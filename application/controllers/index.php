@@ -474,7 +474,8 @@ class index extends CI_Controller {
 				$phone = $_POST['phone'];
 				$carmodel = $_POST['carmodel'];
 				$wheel = $_POST['wheel'];
-				$this->db->query("update `user` set name='{$name}',phone='{$phone}',carmodel='{$carmodel}',wheel='{$wheel}' where id={$this->session->userdata('userid')}");
+				$wheel = $_POST['chepai'];
+				$this->db->query("update `user` set name='{$name}',phone='{$phone}',carmodel='{$carmodel}',wheel='{$wheel}',chepai='{$chepai}' where id={$this->session->userdata('userid')}");
 				redirect("index/profile");
 			}else{
 				$query = $this->db->query("select * from `user` where id={$this->session->userdata('userid')}");

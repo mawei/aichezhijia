@@ -36,7 +36,7 @@
   <div class="am-form-group">
     <label for="doc-ipt-pwd-2" class="am-u-sm-2 am-form-label">车牌</label>
     <div class="am-u-sm-10">
-      <input type="text" id="doc-ipt-pwd-4" placeholder="请输入你的车型" name="chepai" value="{chepai}">
+      <input type="text" id="doc-ipt-pwd-4" placeholder="请输入你的车牌" name="chepai" value="{chepai}">
     </div>
   </div>
 
