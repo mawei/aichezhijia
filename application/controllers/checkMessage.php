@@ -174,7 +174,7 @@ class checkMessage extends CI_Controller
 		$this->saveMessage($info['weixinID'],$msgid,"WOA-cd7-By7HiRWGkEA51p5jLa9W2Yk5KdVGkUsf3Zc",$output_array['errmsg']);
 	}
 	
-	public function  getOrderById($orderid)
+	public function  processOrder($orderid)
 	{
 		$access_token = $this->getAccessToken();
 		
@@ -195,7 +195,11 @@ class checkMessage extends CI_Controller
 		$output_array = json_decode ( $output, true );
 		curl_close ( $ch );
 		// 打印获得的数据
-		return $output_array;
+		$order = $output_array['order'];
+		$order['order_create_time'] = date("Y-m-d H:i:s",$order['order_create_time']);
+		$this->db->insert('order', $order);
+		$checkMessage->MessagePaySuccess($order);
+		//return $output_array;
 	}
 	
 	public function saveMessage($openid,$message_id,$templete_id,$status)
