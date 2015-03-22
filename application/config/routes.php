@@ -43,9 +43,11 @@ $route['index'] = "index/profile";
 $route['admin'] = "admin";
 $route['site'] = "site";
 $route['weixin'] = "weixin";
+$route['wechatCallbackapi'] = "wechatCallbackapi";
 $route['checkmessage'] = "checkMessage";
 $route['404_override'] = '';
 $route['examples'] = "examples/index";
+
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */

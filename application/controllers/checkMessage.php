@@ -174,7 +174,7 @@ class checkMessage extends CI_Controller
 		$this->saveMessage($info['weixinID'],$msgid,"WOA-cd7-By7HiRWGkEA51p5jLa9W2Yk5KdVGkUsf3Zc",$output_array['errmsg']);
 	}
 	
-	public function  processOrder($orderid)
+	public function  getOrderById($orderid)
 	{
 		$access_token = $this->getAccessToken();
 		
@@ -186,8 +186,7 @@ class checkMessage extends CI_Controller
 		curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, 1 );
 		curl_setopt ( $ch, CURLOPT_SSL_VERIFYHOST, 2);
 		curl_setopt ( $ch, CURLOPT_SSL_VERIFYPEER, false);
-		curl_setopt($ch, CURLOPT_USERAGENT, "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.22 (KHTML, like Gecko) Chrome/25.0.1364.172 Safari/537.22");
-		curl_setopt($ch, CURLOPT_ENCODING ,'gzip');
+		
 		// post数据
 		curl_setopt ( $ch, CURLOPT_POST, 1 );
 		// post的变量
