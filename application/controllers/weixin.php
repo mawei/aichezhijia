@@ -1,5 +1,4 @@
 <?php
-require_once 'checkMessage.php';
 if (! defined ( 'BASEPATH' ))
 	exit ( 'No direct script access allowed' );
 
@@ -91,7 +90,15 @@ class wechatCallbackapiTest  extends CI_Controller {
 			{
 				if($event == "merchant_order")
 				{
-					$order = $this->processOrder($postObj->OrderId)['order'];
+					$url = site_url("weixin/processOrder/".$postObj->OrderId);
+					$curl = curl_init();
+					curl_setopt($curl, CURLOPT_URL,$url);
+					curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+					curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
+					curl_setopt($curl, CURLOPT_MAXREDIRS, 10);
+					$output = json_decode(curl_exec($curl)) ;
+					
+					$order = $output['order'];
 					$order['order_create_time'] = date("Y-m-d H:i:s",$order['order_create_time']);
 					$this->db->insert('order', $order);
 					$this->MessagePaySuccess($order);
@@ -234,7 +241,6 @@ class wechatCallbackapiTest  extends CI_Controller {
 	}
 	
 	public function maintanceExpire($info) {
-			
 		$url = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token={$this->access_token}";
 		$post_data = array (
 				"touser" => $info['weixinID'],
@@ -316,8 +322,6 @@ class wechatCallbackapiTest  extends CI_Controller {
 		curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, 1 );
 		curl_setopt ( $ch, CURLOPT_SSL_VERIFYHOST, 2);
 		curl_setopt ( $ch, CURLOPT_SSL_VERIFYPEER, false);
-		curl_setopt($ch, CURLOPT_USERAGENT, "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.22 (KHTML, like Gecko) Chrome/25.0.1364.172 Safari/537.22");
-		curl_setopt($ch, CURLOPT_ENCODING ,'gzip');
 		// post数据
 		curl_setopt ( $ch, CURLOPT_POST, 1 );
 		// post的变量
