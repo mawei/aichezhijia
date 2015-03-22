@@ -27,10 +27,8 @@ class Weixin extends CI_Controller {
 	public function index() {
 		define ( "TOKEN", "weixin" );
 		$wechatObj = new wechatCallbackapiTest ();
-		$postStr = $GLOBALS ["HTTP_RAW_POST_DATA"];
-		$log['message'] = $postStr;
-		$this->db->insert('log', $log);
 		
+		//$postStr = $GLOBALS ["HTTP_RAW_POST_DATA"];
 		if (! isset ( $_GET ['echostr'] )) {
 			$wechatObj->responseMsg ();
 		} else {
@@ -49,6 +47,16 @@ class wechatCallbackapiTest  extends CI_Controller {
 	public function valid() {
 		$echoStr = isset ( $_GET ["echostr"] ) ? $_GET ["echostr"] : "";
 		
+// 		$checkMessage = new checkMessage();
+// 		$order = $checkMessage->getOrderById("12924112555910454761")['order'];
+// 		$log['message'] = $order['product_name'];
+// 		$this->db->insert('log', $log);
+// 		$order['order_create_time'] = date("Y-m-d H:i:s",$order['order_create_time']);
+// 		$checkMessage->MessagePaySuccess($order);
+// 		$this->db->insert('order', $order);
+		
+// 		print_r($order);die();
+		
 		// valid signature , option
 		if ($this->checkSignature ()) {
 			echo $echoStr;
@@ -58,6 +66,7 @@ class wechatCallbackapiTest  extends CI_Controller {
 	
 	public function responseMsg() {
 		// get post data, May be due to the different environments
+		
 		$postStr = $GLOBALS ["HTTP_RAW_POST_DATA"];
 		// extract post data
 		if (! empty ( $postStr )) {
