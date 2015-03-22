@@ -43,6 +43,7 @@ $route['index'] = "index/profile";
 $route['admin'] = "admin";
 $route['site'] = "site";
 $route['weixin'] = "weixin";
+$route['checkmessage'] = "checkMessage";
 $route['404_override'] = '';
 $route['examples'] = "examples/index";
 

@@ -48,7 +48,7 @@ class wechatCallbackapiTest  extends CI_Controller {
 		$echoStr = isset ( $_GET ["echostr"] ) ? $_GET ["echostr"] : "";
 		
 // 		$checkMessage = new checkMessage();
-// 		$order = $checkMessage->getOrderById("12924112555910454761")['order'];
+// 		$order = $checkMessage->getOrderById("12924112555910455451")['order'];
 // 		$log['message'] = $order['product_name'];
 // 		$this->db->insert('log', $log);
 // 		$order['order_create_time'] = date("Y-m-d H:i:s",$order['order_create_time']);

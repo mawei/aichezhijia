@@ -21,6 +21,9 @@ class checkMessage extends CI_Controller
 		curl_setopt ( $ch, CURLOPT_URL, "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid={$this->appid}&secret={$this->secret}" );
 		curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, 1 );
 		curl_setopt ( $ch, CURLOPT_HEADER, 0 );
+		curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);
+		curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+		
 		// 执行并获取HTML文档内容
 		$output = curl_exec ($ch);
 		$output_array = json_decode ( $output, true );
@@ -50,6 +53,9 @@ class checkMessage extends CI_Controller
 		$ch = curl_init ();
 		curl_setopt ( $ch, CURLOPT_URL, $url );
 		curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, 1 );
+		curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);
+		curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+		
 		// post数据
 		curl_setopt ( $ch, CURLOPT_POST, 1 );
 		// post的变量
@@ -84,6 +90,9 @@ class checkMessage extends CI_Controller
 		$ch = curl_init ();
 		curl_setopt ( $ch, CURLOPT_URL, $url );
 		curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, 1 );
+		curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);
+		curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+		
 		// post数据
 		curl_setopt ( $ch, CURLOPT_POST, 1 );
 		// post的变量
@@ -118,6 +127,9 @@ class checkMessage extends CI_Controller
 		$ch = curl_init ();
 		curl_setopt ( $ch, CURLOPT_URL, $url );
 		curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, 1 );
+		curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);
+		curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+		
 		// post数据
 		curl_setopt ( $ch, CURLOPT_POST, 1 );
 		// post的变量
@@ -150,6 +162,9 @@ class checkMessage extends CI_Controller
 		$ch = curl_init ();
 		curl_setopt ( $ch, CURLOPT_URL, $url );
 		curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, 1 );
+		curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);
+		curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+		
 		// post数据
 		curl_setopt ( $ch, CURLOPT_POST, 1 );
 		// post的变量
@@ -165,12 +180,17 @@ class checkMessage extends CI_Controller
 	
 	public function  getOrderById($orderid)
 	{
-		$url = "https://api.weixin.qq.com/merchant/order/getbyid?access_token={$this->access_token}";
+		$access_token = $this->getAccessToken();
+		
+		$url = "https://api.weixin.qq.com/merchant/order/getbyid?access_token={$access_token}";
 		$post_data = array("order_id" => $orderid);
 		$data = json_encode($post_data);
 		$ch = curl_init ();
 		curl_setopt ( $ch, CURLOPT_URL, $url );
 		curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, 1 );
+		curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);
+		curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+		
 		// post数据
 		curl_setopt ( $ch, CURLOPT_POST, 1 );
 		// post的变量
@@ -206,6 +226,7 @@ class checkMessage extends CI_Controller
 	
 		$this->checkMaintanceExpire();
 		$this->checkBaoxianExpire();
+		echo 'success';
 	}
 	
 	private function checkMaintanceExpire()
