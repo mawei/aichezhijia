@@ -3,7 +3,11 @@ require_once 'checkMessage.php';
 if (! defined ( 'BASEPATH' ))
 	exit ( 'No direct script access allowed' );
 class Weixin extends CI_Controller {
-	
+	public function __construct()
+	{
+		parent::__construct();
+		$this->load->database();
+	}
 	/**
 	 * Index Page for this controller.
 	 *
@@ -23,6 +27,10 @@ class Weixin extends CI_Controller {
 	public function index() {
 		define ( "TOKEN", "weixin" );
 		$wechatObj = new wechatCallbackapiTest ();
+		$postStr = $GLOBALS ["HTTP_RAW_POST_DATA"];
+		$log['message'] = $postStr;
+		$this->db->insert('log', $log);
+		
 		if (! isset ( $_GET ['echostr'] )) {
 			$wechatObj->responseMsg ();
 		} else {
