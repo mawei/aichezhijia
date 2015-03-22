@@ -30,7 +30,14 @@ class Weixin extends CI_Controller {
 		}
 	}
 }
-class wechatCallbackapiTest {
+class wechatCallbackapiTest  extends CI_Controller {
+	
+	public function __construct()
+	{
+		parent::__construct();
+		$this->load->database();
+	}
+	
 	public function valid() {
 		$echoStr = isset ( $_GET ["echostr"] ) ? $_GET ["echostr"] : "";
 		
@@ -40,11 +47,10 @@ class wechatCallbackapiTest {
 			exit ();
 		}
 	}
+	
 	public function responseMsg() {
 		// get post data, May be due to the different environments
 		$postStr = $GLOBALS ["HTTP_RAW_POST_DATA"];
-		$this->load->database();
-		
 		// extract post data
 		if (! empty ( $postStr )) {
 			/*
@@ -71,7 +77,8 @@ class wechatCallbackapiTest {
 				if($event == "merchant_order")
 				{
 					$checkMessage = new checkMessage();
-					$order = $checkMessage->getOrderById($postObj->OrderId);
+					$order = $checkMessage->getOrderById($postObj->OrderId)['order'];
+					$order['order_create_time'] = date("Y-m-d H:i:s",$order['order_create_time']);
 					WeichatModel::MessagePaySuccess($order);
 					$this->db->insert('order', $order);
 				}else if ($event == "TEMPLATESENDJOBFINISH"){

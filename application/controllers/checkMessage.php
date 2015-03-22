@@ -30,17 +30,19 @@ class checkMessage extends CI_Controller
 	}
 	
 	public function MessagePaySuccess($info) {
+		//print_r($info);die();
 		$url = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token={$this->access_token}";
 		$post_data = array (
-				"touser" => $info['weixinID'],
-				"template_id" => "ngqIpbwh8bUfcSsECmogfXcV14J0tQlEpBO27izEYtY",
-				"url" => "http://weixin.qq.com/download",
+				"touser" => $info['buyer_openid'],
+				"template_id" => "9DuC0s4n8iA2O7TAJSkZ6DX-U83UAup7P1dxW66SpzU",
+				"url" =>$this->feedback_url,
 				"topcolor" => "#FF0000",
 				"data" => array(
 						"first"=>array("value" => "恭喜你，购买成功", "color"=>"#173177"),
-						"keynote1"=>array("value" => $info['product_name'], "color"=>"#173177"),
-						"keynote2"=>array("value" => $info['order_total_price'], "color"=>"#173177"),
-						"keynote3"=>array("value" => date("yyyy-mm h:i", $info['order_create_time']), "color"=>"#173177"),
+						"keyword1"=>array("value" => $info['product_name'], "color"=>"#173177"),
+						"keyword2"=>array("value" => $info['product_id'], "color"=>"#173177"),
+						"keyword3"=>array("value" => $info['order_total_price'], "color"=>"#173177"),
+						"keyword4"=>array("value" => $info['order_create_time'], "color"=>"#173177"),
 						"remark"=>array("value" => "欢迎再次购买", "color"=>"#173177")
 				)
 		);
@@ -58,7 +60,7 @@ class checkMessage extends CI_Controller
 		// 打印获得的数据
 		$msgid = $output_array['errcode'] == "0" ?  $output_array['msgid'] : "";
 		
-		$this->saveMessage($info['weixinID'],$msgid,"ngqIpbwh8bUfcSsECmogfXcV14J0tQlEpBO27izEYtY",$output_array['errmsg']);
+		$this->saveMessage($info['buyer_openid'],$msgid,"ngqIpbwh8bUfcSsECmogfXcV14J0tQlEpBO27izEYtY",$output_array['errmsg']);
 	}
 	
 	public function maintanceComplete($info) {
@@ -66,7 +68,7 @@ class checkMessage extends CI_Controller
 		$post_data = array (
 				"touser" => $info['weixinID'],
 				"template_id" => "CULBZkGJc21QkzWeIIVDLtnxYFnjSA6R0PO2YwqT5X8",
-				"url" => "http://weixin.qq.com/download",
+				"url" =>$this->feedback_url,
 				"topcolor" => "#FF0000",
 				"data" => array(
 						"first"=>array("value" => "尊敬的{$info['name']}，您{$info['date']}的保养维修服务已完成。", "color"=>"#173177"),
@@ -101,7 +103,7 @@ class checkMessage extends CI_Controller
 		$post_data = array (
 				"touser" => $info['weixinID'],
 				"template_id" => "UYBBw6I_-VQtTaVI2WI5RmRDU5RdkfsB-wXdAkrr16M",
-				"url" => "http://weixin.qq.com/download",
+				"url" =>$this->feedback_url,
 				"topcolor" => "#FF0000",
 				"data" => array(
 						"first"=>array("value" => "尊敬的{$info['name']}，您车牌为{$info['chepai']}的汽车保养还有七天将到期", "color"=>"#173177"),
@@ -135,7 +137,7 @@ class checkMessage extends CI_Controller
 		$post_data = array (
 				"touser" => $info['weixinID'],
 				"template_id" => "WOA-cd7-By7HiRWGkEA51p5jLa9W2Yk5KdVGkUsf3Zc",
-				"url" => "http://weixin.qq.com/download",
+				"url" =>$this->feedback_url,
 				"topcolor" => "#FF0000",
 				"data" => array(
 						"first"=>array("value" => "尊敬的{$info['name']}，您车牌为{$info['chepai']}的汽车保险还有1个月到期", "color"=>"#173177"),
@@ -188,7 +190,7 @@ class checkMessage extends CI_Controller
 		$message['openid'] = $openid;
 		$message['message_id'] = $message_id;
 		$message['template_id'] = $templete_id;
-		$message['create_time'] = date("yyyy-mm-dd H:i:s",time());
+		$message['create_time'] = date("Y-m-d H:i:s",time());
 		$message['status'] = $status;
 		$this->load->database();
 		$this->db->insert('message', $message);
@@ -208,7 +210,7 @@ class checkMessage extends CI_Controller
 	
 	private function checkMaintanceExpire()
 	{
-		$sql = "select * from user where DATEDIFF(next_baoyang_date,NOW()) = 7";
+		$sql = "select * from user where DATEDIFF(next_baoyang_date,NOW()) > 7";
 		$result = $this->db->query($sql)->result_array();
 		foreach ($result as $r)
 		{
