@@ -186,7 +186,8 @@ class checkMessage extends CI_Controller
 		curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, 1 );
 		curl_setopt ( $ch, CURLOPT_SSL_VERIFYHOST, 2);
 		curl_setopt ( $ch, CURLOPT_SSL_VERIFYPEER, false);
-		
+		curl_setopt($ch, CURLOPT_USERAGENT, "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.22 (KHTML, like Gecko) Chrome/25.0.1364.172 Safari/537.22");
+		curl_setopt($ch, CURLOPT_ENCODING ,'gzip');
 		// post数据
 		curl_setopt ( $ch, CURLOPT_POST, 1 );
 		// post的变量
@@ -195,11 +196,7 @@ class checkMessage extends CI_Controller
 		$output_array = json_decode ( $output, true );
 		curl_close ( $ch );
 		// 打印获得的数据
-		$order = $output_array['order'];
-		$order['order_create_time'] = date("Y-m-d H:i:s",$order['order_create_time']);
-		$this->db->insert('order', $order);
-		$checkMessage->MessagePaySuccess($order);
-		//return $output_array;
+		return $output_array;
 	}
 	
 	public function saveMessage($openid,$message_id,$templete_id,$status)

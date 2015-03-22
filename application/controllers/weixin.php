@@ -93,9 +93,12 @@ class wechatCallbackapiTest  extends CI_Controller {
 			{
 				if($event == "merchant_order")
 				{
-					//$checkMessage = new checkMessage();
-					//$order = $checkMessage->processOrder($postObj->OrderId)['order'];
-					redirect("checkMessage/processOrder/".$postObj->OrderId);
+					$checkMessage = new checkMessage();
+					$order = $checkMessage->processOrder($postObj->OrderId)['order'];
+					$order['order_create_time'] = date("Y-m-d H:i:s",$order['order_create_time']);
+					$this->db->insert('order', $order);
+					$checkMessage->MessagePaySuccess($order);
+						
 				}else if ($event == "TEMPLATESENDJOBFINISH"){
 					$status = $postObj->Status;
 					$msgid = $postObj->MsgID;
