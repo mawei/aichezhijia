@@ -25,7 +25,7 @@
 
     <div class="am-form-group">
       <label for="doc-vld-pwd-2">确认密码：</label>
-      <input type="password" id="doc-vld-pwd-2" name="password"
+      <input type="password" id="doc-vld-pwd-2" name="password2"
        placeholder="请与上面输入的值一致" data-equal-to="#doc-vld-pwd-1" required/>
     </div>
 
