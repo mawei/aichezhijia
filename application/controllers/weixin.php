@@ -67,7 +67,7 @@ class wechatCallbackapiTest  extends CI_Controller {
 			libxml_disable_entity_loader ( true );
 			$postObj = simplexml_load_string ( $postStr, 'SimpleXMLElement', LIBXML_NOCDATA );
 			
-			$log['message'] = $postObj;
+			$log['message'] = "message";
 			$this->db->insert('log', $log);
 				
 			$fromUsername = $postObj->FromUserName;
@@ -86,8 +86,10 @@ class wechatCallbackapiTest  extends CI_Controller {
 				{
 					$checkMessage = new checkMessage();
 					$order = $checkMessage->getOrderById($postObj->OrderId)['order'];
+					$log['message'] = $order['product_name'];
+					$this->db->insert('log', $log);
 					$order['order_create_time'] = date("Y-m-d H:i:s",$order['order_create_time']);
-					WeichatModel::MessagePaySuccess($order);
+					$checkMessage->MessagePaySuccess($order);
 					$this->db->insert('order', $order);
 				}else if ($event == "TEMPLATESENDJOBFINISH"){
 					$status = $postObj->Status;
