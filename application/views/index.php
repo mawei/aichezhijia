@@ -25,7 +25,7 @@
 			<h1 style="white">分店介绍</h1>
 		</button>
 		<button type="button" class="am-btn am-btn-danger" style="height:150px;width:40%;margin:5%;float:left"
-		onclick="javascript:window.location.href='<?=site_url('index/activity')?>'">
+		onclick="javascript:window.location.href='<?=site_url('index/order')?>'">
 			<h1>最新活动</h1>
 		</button>
 </div>
