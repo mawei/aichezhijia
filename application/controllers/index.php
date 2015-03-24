@@ -268,17 +268,15 @@ class index extends CI_Controller {
 		if($result->return_code == "SUCCESS")
 		{
 			$this->data['timeStamp'] = time();
-			$this->data['appid'] = $result->appid;
-			$this->data['nonce_str'] = $result->nonce_str; 
+			$this->data['appId'] = $result->appid;
+			$this->data['nonceStr'] = $result->nonce_str; 
 			$this->data['signType'] = 'MD5';
 			$this->data['package'] = "prepay_id=".$result->prepay_id;
 						
 			$result['appid'] = 
-			$string = "appid={$data['appid']}&nonce_str={$this->data['nonce_str']}&package={$this->data['package']}
-			&timeStamp={$this->data['timeStamp']}&signType=MD5";
-			$string .= $string . "&key=7c914cc19e472a13e7b93aad9aa7bc69";
+			$string = "appid={$this->data['appId']}&nonceStr={$this->data['nonce_str']}&package={$this->data['package']}&signType=MD5&timeStamp={$this->data['timeStamp']}";
+			$string = $string . "&key=7c914cc19e472a13e7b93aad9aa7bc69";
 			$this->data['paySign'] = strtoupper(MD5($string));
-			
 			$this->data['phone'] = $p['phone'];
 			$this->data['chepai'] = $p['chepai'];
 			$this->data['carmodel'] = $p['carmodel'];
