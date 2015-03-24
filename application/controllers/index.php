@@ -275,7 +275,6 @@ class index extends CI_Controller {
 			$this->data['signType'] = 'MD5';
 			$this->data['package'] = "prepay_id=".$result->prepay_id;
 						
-			$result['appid'] = 
 			$string = "appid={$this->data['appId']}&nonceStr={$this->data['nonceStr']}&package={$this->data['package']}&signType=MD5&timeStamp={$this->data['timeStamp']}";
 			$string = $string . "&key=7c914cc19e472a13e7b93aad9aa7bc69";
 			$this->data['paySign'] = $result->sign;
