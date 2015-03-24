@@ -64,6 +64,23 @@ class Weixin extends CI_Controller {
 		$return['return_msg'] = $postStr->return_msg;
 		echo $this->arrayToXml($return);
 	}
+	
+	function arrayToXml($arr)
+	{
+		$xml = "<xml>";
+		foreach ($arr as $key=>$val)
+		{
+			if (is_numeric($val))
+			{
+				$xml.="<".$key.">".$val."</".$key.">";
+			}
+			else
+				$xml.="<".$key."><![CDATA[".$val."]]></".$key.">";
+		}
+		$xml.="</xml>";
+		return $xml;
+	}
+	
 }
 class wechatCallbackapiTest  extends CI_Controller {
 	
@@ -166,22 +183,7 @@ class wechatCallbackapiTest  extends CI_Controller {
 		return $output_array;
 	}
 	
-	function arrayToXml($arr)
-	{
-		$xml = "<xml>";
-		foreach ($arr as $key=>$val)
-		{
-			if (is_numeric($val))
-			{
-				$xml.="<".$key.">".$val."</".$key.">";
-			}
-			else
-				$xml.="<".$key."><![CDATA[".$val."]]></".$key.">";
-		}
-		$xml.="</xml>";
-		return $xml;
-	}
-	
+		
 	
 	
 	private function checkSignature() {
