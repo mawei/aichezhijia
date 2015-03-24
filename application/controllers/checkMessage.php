@@ -41,10 +41,10 @@ class checkMessage extends CI_Controller
 				"topcolor" => "#FF0000",
 				"data" => array(
 						"first"=>array("value" => "恭喜你，购买成功", "color"=>"#173177"),
-						"keyword1"=>array("value" => $info['product_name'], "color"=>"#173177"),
-						"keyword2"=>array("value" => $info['product_id'], "color"=>"#173177"),
-						"keyword3"=>array("value" => $info['order_total_price'], "color"=>"#173177"),
-						"keyword4"=>array("value" => $info['order_create_time'], "color"=>"#173177"),
+						"keyword1"=>array("value" => $info['name'], "color"=>"#173177"),
+						"keyword2"=>array("value" => $info['id'], "color"=>"#173177"),
+						"keyword3"=>array("value" => $info['price'], "color"=>"#173177"),
+						"keyword4"=>array("value" => $info['create_time'], "color"=>"#173177"),
 						"remark"=>array("value" => "欢迎再次购买", "color"=>"#173177")
 				)
 		);
@@ -227,7 +227,7 @@ class checkMessage extends CI_Controller
 	
 	private function checkMaintanceExpire()
 	{
-		$sql = "select * from user where DATEDIFF(next_baoyang_date,NOW()) > 7";
+		$sql = "select * from user where DATEDIFF(next_baoyang_date,NOW()) = 7";
 		$result = $this->db->query($sql)->result_array();
 		foreach ($result as $r)
 		{

@@ -35,6 +35,35 @@ class Weixin extends CI_Controller {
 			$wechatObj->valid ();
 		}
 	}
+	
+	//feedback
+	public function get_pay_info()
+	{
+		$postStr = $GLOBALS ["HTTP_RAW_POST_DATA"];
+		// extract post data
+		if (! empty ( $postStr )) {
+			/*
+			 * libxml_disable_entity_loader is to prevent XML eXternal Entity Injection, the best way is to check the validity of xml by yourself
+			*/
+			libxml_disable_entity_loader ( true );
+			$postObj = simplexml_load_string ( $postStr, 'SimpleXMLElement', LIBXML_NOCDATA );
+			if($postObj->return_code == "SUCCESS")
+			{
+				$sql = "update `order` set status='已付款' where md5(id) = '{$postObj->out_trade_no}'";
+				$this->db->query($sql);
+				$order = "select t1.*,t2.name,t2.price from `order` t1 left join `product` t2 on t1.product_id=t2.id where md5(id) = '{$postObj->out_trade_no}' ";
+				$checkMessage = new checkMessage();
+				$checkMessage->MessagePaySuccess($order);
+			}else{
+				$sql = "update `order` set status='{$postObj->return_msg}' where md5(id) = '{$postObj->out_trade_no}'";
+				$this->db->query($sql);
+			}
+		}
+	
+		$return['return_code'] = $postStr->return_code;
+		$return['return_msg'] = $postStr->return_msg;
+		echo $this->arrayToXml($return);
+	}
 }
 class wechatCallbackapiTest  extends CI_Controller {
 	
@@ -122,6 +151,8 @@ class wechatCallbackapiTest  extends CI_Controller {
 		}
 	}
 	
+
+	
 	private function getOrderInfo($orderid) {
 		$url = site_url("checkMessage/getOrderById/".$orderid);
 		$ch = curl_init ();
@@ -133,7 +164,22 @@ class wechatCallbackapiTest  extends CI_Controller {
 		curl_close ( $ch );
 		// 打印获得的数据
 		return $output_array;
-		
+	}
+	
+	function arrayToXml($arr)
+	{
+		$xml = "<xml>";
+		foreach ($arr as $key=>$val)
+		{
+			if (is_numeric($val))
+			{
+				$xml.="<".$key.">".$val."</".$key.">";
+			}
+			else
+				$xml.="<".$key."><![CDATA[".$val."]]></".$key.">";
+		}
+		$xml.="</xml>";
+		return $xml;
 	}
 	
 	

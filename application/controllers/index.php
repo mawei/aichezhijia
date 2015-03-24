@@ -229,17 +229,21 @@ class index extends CI_Controller {
 		$order['create_time'] = date("Y-m-d H:i:s");
 		$order['date'] = $date;
 		$order['user_id'] = $this->session->userdata('userid');
+		$user = $this->db->query("select * from user where id={$order['user_id']}")->result_array()[0];
+		$order['buyer_openid'] = $user['weixinID'];
+		$order['status'] = "未付款";
 		$this->db->insert('order',$order);
 		$p = $this->db->query("select t1.*,t2.phone,t2.chepai,t2.weixinID,t2.carmodel,t3.name,t3.price from `order` t1 left join user t2 on t1.user_id=t2.id
 				left join product t3 on t3.id=t1.product_id
 				 where t1.id={$this->db->insert_id()}")->result_array()[0];
+		$order['buyer_openid'] = $p['weixinID'];
 		
 		$data['appid'] = 'wx13facdc7a21c75b6';
 		$data['body'] = $p['name'];
 		$data['device_info'] = 'WEB';
 		$data['mch_id'] = '1227215102';
 		$data['nonce_str'] = md5(rand(100000, 99999));
-		$data['notify_url'] = site_url("index/wechat_pay_notifyurl");
+		$data['notify_url'] = site_url("weixin/get_pay_info");
 		$data['openid'] = $p['weixinID'];
 		$data['out_trade_no'] = md5($p['id']);
 		$data['spbill_create_ip'] = "8.8.8.8";
@@ -247,7 +251,7 @@ class index extends CI_Controller {
 		$data['trade_type'] = "JSAPI";
 		$string = "appid={$data['appid']}&body={$data['body']}&device_info={$data['device_info']}&mch_id={$data['mch_id']}&nonce_str={$data['nonce_str']}&notify_url={$data['notify_url']}&openid={$data['openid']}&out_trade_no={$data['out_trade_no']}&spbill_create_ip={$data['spbill_create_ip']}&total_fee={$data['total_fee']}&trade_type={$data['trade_type']}";
 		$string = $string . "&key=7c914cc19e472a13e7b93aad9aa7bc69";
-		//echo $string;die();
+		
 		$data['sign'] = strtoupper(MD5($string));
 		$post_data = $this->arrayToXml($data);
 		$ch = curl_init();
@@ -269,6 +273,7 @@ class index extends CI_Controller {
 		//print_r($postObj);die();
 		if($result->return_code == "SUCCESS")
 		{
+			
 			$this->data['timeStamp'] = time();
 			$this->data['appId'] = $result->appid;
 			$this->data['nonceStr'] = md5(rand(100000, 99999));; 
