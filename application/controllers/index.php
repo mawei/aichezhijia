@@ -205,6 +205,86 @@ class index extends CI_Controller {
 		$this->parser->parse('aboutus',$this->data);
 	}
 	
+	public function order()
+	{
+		$loginResult = $this->needlogin();
+		if($loginResult == 'success')
+		{
+			$products = $this->db->query("select * from product")->result_array();
+			$this->data['products'] = $products;
+			$this->parser->parse('order',$this->data);
+		}elseif($loginResult != '')
+		{
+			redirect("index/login?weixinID={$loginResult}");
+		}
+		
+		
+	}
+	
+	public function submit_order()
+	{
+		$product = addslashes($_POST['product']);
+		$date = addslashes($_POST['date']);
+		$order['product_id'] = $product;
+		$order['create_time'] = date("Y-M-d H:i:s");
+		$order['date'] = $date;
+		$order['user_id'] = $this->session->userdata('userid');
+		$this->db->insert($order);
+		$p = $this->db->query("select t1.*,t2.phone,t2.chepai,t2.carmodel from `order` t1 left join user t2 on t1.user_id=t2.id where t1.id={$this->db->insert_id()}")->result_array()[0];
+		
+		$data['appId'] = 'wx13facdc7a21c75b6';
+		$data['body'] = $p['name'];
+		$data['device_info'] = 'WEB';
+		$data['mch_id'] = '1227215102';
+		$data['nonce_str'] = md5(rand(100000, 99999));
+		$data['notify_url'] = site_url("index/wechat_pay_notifyurl");
+		$data['out_trade_no'] = sprintf("%32d", $p['id']);
+		$data['spbill_create_ip'] = $_SERVER["REMOTE_ADDR"];
+		$data['total_fee'] = $p['amount'];
+		$data['trade_type'] = "JSAPI";
+		$string = "appid={$data['appId']}&body={$data['body']}&device_info={$data['device_info']}&mch_id={$data['mch_id']}
+		&notify_url={$data['notify_url']}&nonce_str={$data['nonce_str']}&out_trade_no={$data['out_trade_no']}
+		&spbill_create_ip={$data['spbill_create_ip']}&total_fee={$data['total_fee']}&trade_type={$data['trade_type']}";
+		$string .= $string . "&key=7c914cc19e472a13e7b93aad9aa7bc69";
+		$data['sign'] = MD5($string).toUpperCase();
+		
+		$ch = curl_init();
+		// 设置选项，包括URL
+		curl_setopt ( $ch, CURLOPT_URL, "https://api.mch.weixin.qq.com/pay/unifiedorder" );
+		curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, 1 );
+		curl_setopt ( $ch, CURLOPT_SSL_VERIFYHOST, 2);
+		curl_setopt ( $ch, CURLOPT_SSL_VERIFYPEER, false);
+				// post数据
+		curl_setopt ( $ch, CURLOPT_POST, 1 );
+		// post的变量
+		curl_setopt ( $ch, CURLOPT_POSTFIELDS, $data );
+		$output = curl_exec ( $ch );
+		$result = json_decode ( $output, true );
+		
+		if($result['return_code'] == "SUCCESS")
+		{
+			$this->data['timeStamp'] = time();
+			$this->data['appId'] = $result['appId'];
+			$this->data['nonceStr'] = $result['nonceStr'];
+			$this->data['signType'] = 'MD5';
+			$this->data['package'] = "prepay_id=".$result['appId'];
+						
+			$result['appid'] = 
+			$string = "appid={$data['appId']}&nonce_str={$data['nonce_str']}&package={$this->data['package']}
+			&timeStamp={$this->data['timeStamp']}&signType=MD5";
+			$string .= $string . "&key=7c914cc19e472a13e7b93aad9aa7bc69";
+			$this->data['paySign'] = MD5($string).toUpperCase();
+			$this->parser->parse('order_confirm',$this->data);
+			
+			$this->data['product'] = $product;
+			$this->parser->parse('order_confirm',$this->data);
+		}else{
+			echo $result['return_code'].$result['return_msg'];
+		}
+			
+		
+	}
+	
 	public function registerpost()
 	{
 		$username = addslashes($_POST['username']);
@@ -310,7 +390,6 @@ class index extends CI_Controller {
 		{
 			redirect("index/login?weixinID={$loginResult}");
 		}
-		
 	}
 	
 	public function workerlist(){

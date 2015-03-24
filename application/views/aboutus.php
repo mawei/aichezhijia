@@ -19,5 +19,3 @@ data-am-paragraph="{ tableScrollable: true, pureview: true }">
 {footer}
 </body>
 </html>
-
-

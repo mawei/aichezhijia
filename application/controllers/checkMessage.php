@@ -195,7 +195,7 @@ class checkMessage extends CI_Controller
 		$output_array = json_decode ( $output, true );
 		curl_close ( $ch );
 		// 打印获得的数据
-		return $output_array;
+		echo $output_array;
 	}
 	
 	public function saveMessage($openid,$message_id,$templete_id,$status)

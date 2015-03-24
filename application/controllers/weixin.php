@@ -121,6 +121,23 @@ class wechatCallbackapiTest  extends CI_Controller {
 			exit ();
 		}
 	}
+	
+	private function getOrderInfo($orderid) {
+		$url = site_url("checkMessage/getOrderById/".$orderid);
+		$ch = curl_init ();
+		curl_setopt ( $ch, CURLOPT_URL, $url );
+		curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, 1 );
+		
+		$output = curl_exec ( $ch );
+		$output_array = json_decode ( $output, true );
+		curl_close ( $ch );
+		// 打印获得的数据
+		return $output_array;
+		
+	}
+	
+	
+	
 	private function checkSignature() {
 		// you must define TOKEN by yourself
 		if (! defined ( "TOKEN" )) {
