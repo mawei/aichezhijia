@@ -226,66 +226,88 @@ class index extends CI_Controller {
 		$product = addslashes($_POST['product']);
 		$date = addslashes($_POST['date']);
 		$order['product_id'] = $product;
-		$order['create_time'] = date("Y-M-d H:i:s");
+		$order['create_time'] = date("Y-m-d H:i:s");
 		$order['date'] = $date;
 		$order['user_id'] = $this->session->userdata('userid');
 		$this->db->insert('order',$order);
-		$p = $this->db->query("select t1.*,t2.phone,t2.chepai,t2.carmodel,t3.name,t3.price from `order` t1 left join user t2 on t1.user_id=t2.id
+		$p = $this->db->query("select t1.*,t2.phone,t2.chepai,t2.weixinID,t2.carmodel,t3.name,t3.price from `order` t1 left join user t2 on t1.user_id=t2.id
 				left join product t3 on t3.id=t1.product_id
 				 where t1.id={$this->db->insert_id()}")->result_array()[0];
 		
-		$data['appId'] = 'wx13facdc7a21c75b6';
+		$data['appid'] = 'wx13facdc7a21c75b6';
 		$data['body'] = $p['name'];
 		$data['device_info'] = 'WEB';
 		$data['mch_id'] = '1227215102';
 		$data['nonce_str'] = md5(rand(100000, 99999));
 		$data['notify_url'] = site_url("index/wechat_pay_notifyurl");
-		$data['out_trade_no'] = sprintf("%32d", $p['id']);
-		$data['spbill_create_ip'] = $_SERVER["REMOTE_ADDR"];
+		$data['openid'] = $p['weixinID'];
+		$data['out_trade_no'] = md5($p['id']);
+		$data['spbill_create_ip'] = "8.8.8.8";
 		$data['total_fee'] = $p['price'];
 		$data['trade_type'] = "JSAPI";
-		$string = "appid={$data['appId']}&body={$data['body']}&device_info={$data['device_info']}&mch_id={$data['mch_id']}
-		&notify_url={$data['notify_url']}&nonce_str={$data['nonce_str']}&out_trade_no={$data['out_trade_no']}
-		&spbill_create_ip={$data['spbill_create_ip']}&total_fee={$data['total_fee']}&trade_type={$data['trade_type']}";
-		$string .= $string . "&key=7c914cc19e472a13e7b93aad9aa7bc69";
+		$string = "appid={$data['appid']}&body={$data['body']}&device_info={$data['device_info']}&mch_id={$data['mch_id']}&nonce_str={$data['nonce_str']}&notify_url={$data['notify_url']}&openid={$data['openid']}&out_trade_no={$data['out_trade_no']}&spbill_create_ip={$data['spbill_create_ip']}&total_fee={$data['total_fee']}&trade_type={$data['trade_type']}";
+		$string = $string . "&key=7c914cc19e472a13e7b93aad9aa7bc69";
+		//echo $string;die();
 		$data['sign'] = strtoupper(MD5($string));
-		
+		$post_data = $this->arrayToXml($data);
 		$ch = curl_init();
 		// 设置选项，包括URL
 		curl_setopt ( $ch, CURLOPT_URL, "https://api.mch.weixin.qq.com/pay/unifiedorder" );
-		curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, 1 );
-		curl_setopt ( $ch, CURLOPT_SSL_VERIFYHOST, 2);
-		curl_setopt ( $ch, CURLOPT_SSL_VERIFYPEER, false);
-				// post数据
-		curl_setopt ( $ch, CURLOPT_POST, 1 );
+		curl_setopt($ch, CURLOPT_HEADER, 0);//设置header
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);//要求结果为字符串且输出到屏幕上
+		curl_setopt($ch, CURLOPT_POST, 1);//post提交方式
 		// post的变量
-		curl_setopt ( $ch, CURLOPT_POSTFIELDS, $data );
+		curl_setopt ( $ch, CURLOPT_POSTFIELDS, $post_data );
+		
 		$output = curl_exec ( $ch );
-		$result = json_decode ( $output, true );
-		print_r($result);
-		if($result['return_code'] == "SUCCESS")
+		libxml_disable_entity_loader ( true );
+		$result = simplexml_load_string ( $output, 'SimpleXMLElement', LIBXML_NOCDATA );
+			
+		//$result = json_decode ( $output, true );
+		//print_r($postObj);die();
+		if($result->return_code == "SUCCESS")
 		{
 			$this->data['timeStamp'] = time();
-			$this->data['appId'] = $result['appId'];
-			$this->data['nonceStr'] = $result['nonceStr'];
+			$this->data['appid'] = $result->appid;
+			$this->data['nonce_str'] = $result->nonce_str; 
 			$this->data['signType'] = 'MD5';
-			$this->data['package'] = "prepay_id=".$result['appId'];
+			$this->data['package'] = "prepay_id=".$result->prepay_id;
 						
 			$result['appid'] = 
-			$string = "appid={$data['appId']}&nonce_str={$data['nonce_str']}&package={$this->data['package']}
+			$string = "appid={$data['appid']}&nonce_str={$this->data['nonce_str']}&package={$this->data['package']}
 			&timeStamp={$this->data['timeStamp']}&signType=MD5";
 			$string .= $string . "&key=7c914cc19e472a13e7b93aad9aa7bc69";
-			$this->data['paySign'] = MD5($string).toUpperCase();
-			$this->parser->parse('order_confirm',$this->data);
+			$this->data['paySign'] = strtoupper(MD5($string));
 			
-			$this->data['product'] = $product;
+			$this->data['phone'] = $p['phone'];
+			$this->data['chepai'] = $p['chepai'];
+			$this->data['carmodel'] = $p['carmodel'];
+			$this->data['name'] = $p['name'];
+			$this->data['price'] = $p['price'];
+			$this->data['date'] = $p['date'];
 			$this->parser->parse('order_confirm',$this->data);
 		}else{
-			echo $result['return_code'].$result['return_msg'];
+			echo $result->return_code.$result->return_msg;
 		}
-			
-		
 	}
+	
+	function arrayToXml($arr)
+    {
+        $xml = "<xml>";
+        foreach ($arr as $key=>$val)
+        {
+        	 if (is_numeric($val))
+        	 {
+        	 	$xml.="<".$key.">".$val."</".$key.">"; 
+
+        	 }
+        	 else
+        	 	$xml.="<".$key."><![CDATA[".$val."]]></".$key.">";  
+        }
+        $xml.="</xml>";
+//       echo $xml;die();
+        return $xml; 
+    }
 	
 	public function registerpost()
 	{

@@ -5,8 +5,8 @@
 function onBridgeReady(){
 	   WeixinJSBridge.invoke(
 	       'getBrandWCPayRequest', {
-	           "appId" : {appId},     //公众号名称，由商户传入     
-	           "timeStamp":{time},         //时间戳，自1970年以来的秒数     
+	           "appId" : {appid},     //公众号名称，由商户传入     
+	           "timeStamp":{timeStamp},         //时间戳，自1970年以来的秒数     
 	           "nonceStr" : {nonce_str}, //随机串     
 	           "package" : {package},     
 	           "signType" : "MD5",         //微信签名方式:     
@@ -27,7 +27,7 @@ function onBridgeReady(){
 	}else{
 	   onBridgeReady();
 	}
-
+$("#getBrandWCPayRequest").onclick(onBridgeReady());
 </script>
 <body>
 {header}
@@ -35,7 +35,6 @@ function onBridgeReady(){
 <div data-am-widget="list_news" class="am-list-news am-list-news-default">
   <div class="am-list-news-bd">
     <ul class="am-list">
-    {order}
       <li class="am-g am-list-item-dated">
         <a class="am-list-item-hd " onclick="javascript:void(0);">手机号</a>
         <span class="am-list-date">{phone}</span>
@@ -66,22 +65,18 @@ function onBridgeReady(){
       </li>
       <li class="am-g am-list-item-dated">
       
-		<form class="am-form am-form-horizontal" method="post" action="<?=site_url('index/editprofile')?>">
 		  <div class="am-form-group">
-		    <label for="doc-ipt-3" class="am-u-sm-2 am-form-label">名字</label>
 		    <div class="am-u-sm-10">
 		      <input type="hidden" id="doc-ipt-3" name="orderid" value="{id}">
 		    </div>
 		  </div>
 		  <div class="am-form-group">
 		    <div class="am-u-sm-10 am-u-sm-offset-2">
-		    <button class="am-btn am-btn-secondary" type="submit">下一步</button>
+		    <button class="am-btn am-btn-secondary" type="submit" id="getBrandWCPayRequest">确认支付</button>
 		    </div>
 		  </div>
-		  </form>
 	  </li>
       </ul>
-            {/order}
   </div>
 </div>
 </div>
