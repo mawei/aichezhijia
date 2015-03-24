@@ -243,7 +243,6 @@ class index extends CI_Controller {
 		$data['device_info'] = 'WEB';
 		$data['mch_id'] = '1227215102';
 		$data['nonce_str'] = md5(rand(100000, 99999));
-		echo site_url("weixin/get_pay_info");die();
 		$data['notify_url'] = site_url("weixin/get_pay_info");
 		$data['openid'] = $p['weixinID'];
 		$data['out_trade_no'] = md5($p['id']);
