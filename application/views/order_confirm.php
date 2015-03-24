@@ -3,7 +3,6 @@
 {head}
 <script type="text/javascript">
 function onBridgeReady(){
-	
 	   WeixinJSBridge.invoke(
 	       'getBrandWCPayRequest', {
 	           "appId" : "{appid}",     //公众号名称，由商户传入     
@@ -28,7 +27,6 @@ function onBridgeReady(){
 	}else{
 	   onBridgeReady();
 	}
-$("#getBrandWCPayRequest").click(onBridgeReady());
 </script>
 <body>
 {header}
