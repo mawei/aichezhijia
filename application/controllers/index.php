@@ -229,8 +229,10 @@ class index extends CI_Controller {
 		$order['create_time'] = date("Y-M-d H:i:s");
 		$order['date'] = $date;
 		$order['user_id'] = $this->session->userdata('userid');
-		$this->db->insert($order);
-		$p = $this->db->query("select t1.*,t2.phone,t2.chepai,t2.carmodel from `order` t1 left join user t2 on t1.user_id=t2.id where t1.id={$this->db->insert_id()}")->result_array()[0];
+		$this->db->insert('order',$order);
+		$p = $this->db->query("select t1.*,t2.phone,t2.chepai,t2.carmodel,t3.name,t3.price from `order` t1 left join user t2 on t1.user_id=t2.id
+				left join product t3 on t3.id=t1.product_id
+				 where t1.id={$this->db->insert_id()}")->result_array()[0];
 		
 		$data['appId'] = 'wx13facdc7a21c75b6';
 		$data['body'] = $p['name'];
@@ -240,13 +242,13 @@ class index extends CI_Controller {
 		$data['notify_url'] = site_url("index/wechat_pay_notifyurl");
 		$data['out_trade_no'] = sprintf("%32d", $p['id']);
 		$data['spbill_create_ip'] = $_SERVER["REMOTE_ADDR"];
-		$data['total_fee'] = $p['amount'];
+		$data['total_fee'] = $p['price'];
 		$data['trade_type'] = "JSAPI";
 		$string = "appid={$data['appId']}&body={$data['body']}&device_info={$data['device_info']}&mch_id={$data['mch_id']}
 		&notify_url={$data['notify_url']}&nonce_str={$data['nonce_str']}&out_trade_no={$data['out_trade_no']}
 		&spbill_create_ip={$data['spbill_create_ip']}&total_fee={$data['total_fee']}&trade_type={$data['trade_type']}";
 		$string .= $string . "&key=7c914cc19e472a13e7b93aad9aa7bc69";
-		$data['sign'] = MD5($string).toUpperCase();
+		$data['sign'] = strtoupper(MD5($string));
 		
 		$ch = curl_init();
 		// 设置选项，包括URL
@@ -260,7 +262,7 @@ class index extends CI_Controller {
 		curl_setopt ( $ch, CURLOPT_POSTFIELDS, $data );
 		$output = curl_exec ( $ch );
 		$result = json_decode ( $output, true );
-		
+		print_r($result);
 		if($result['return_code'] == "SUCCESS")
 		{
 			$this->data['timeStamp'] = time();
@@ -423,7 +425,7 @@ class index extends CI_Controller {
 		}
 	}
 	
-	public function order()
+	public function orderlist()
 	{
 		$loginResult = $this->needlogin();
 		if($loginResult == 'success')
