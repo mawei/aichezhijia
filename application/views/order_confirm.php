@@ -13,7 +13,6 @@ function onBridgeReady(){
 	           "paySign" : "{paySign}" //微信签名 
 	       },
 	       function(res){  
-		       alert(res);   
 	           if(res.err_msg == "get_brand_wcpay_request:ok" ) {} 
 	           else{
 		           alert(res.err_msg);
