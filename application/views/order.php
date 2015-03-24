@@ -6,7 +6,7 @@
 <body>
 {header}
 
-<form class="am-form am-form-horizontal" method="post" action="<?=site_url('index/submit_order?showwxpaytitle=1')?>">
+<form class="am-form" method="post" action="<?=site_url('index/submit_order?showwxpaytitle=1')?>">
   <div class="am-form-group">
     <label for="doc-ipt-3" class="am-u-sm-2 am-form-label">预约产品及定金</label>
     <div class="am-u-sm-10">
