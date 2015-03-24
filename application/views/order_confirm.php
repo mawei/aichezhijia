@@ -3,7 +3,6 @@
 {head}
 <script type="text/javascript">
 function onBridgeReady(){
-		alert('1');
 	
 	   WeixinJSBridge.invoke(
 	       'getBrandWCPayRequest', {
