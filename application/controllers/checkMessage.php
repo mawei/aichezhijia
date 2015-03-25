@@ -200,8 +200,8 @@ class checkMessage extends CI_Controller
 	
 	public function saveMessage($openid,$message_id,$templete_id,$status)
 	{
-		echo $openid;
-		print_r($status);
+		//echo $openid;
+		//print_r($status);
 		
 		$message['openid'] = $openid;
 		$message['message_id'] = $message_id;

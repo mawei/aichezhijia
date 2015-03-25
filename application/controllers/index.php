@@ -350,6 +350,7 @@ class index extends CI_Controller {
        	$result = simplexml_load_string ( $output, 'SimpleXMLElement', LIBXML_NOCDATA );
        	if($result->return_code == "SUCCESS")
        	{
+       		 
        		if($result->trade_state == "SUCCESS")
        		{
        			$sql = "update `order` set status='已付款' where md5(id) = '{$data['out_trade_no']}'";
@@ -357,7 +358,7 @@ class index extends CI_Controller {
        			$order = $this->db->query("select t1.*,t2.name,t2.price from `order` t1 left join `product` t2 on t1.product_id=t2.id where md5(t1.id) = '{$data['out_trade_no']}' ")->result_array()[0];
        			$checkMessage = new checkMessage();
        			$checkMessage->MessagePaySuccess($order);
-       			echo 'success';
+				$this->parser->parse('order_success',$this->data);
        		}else{
     			$sql = "update `order` set status='{$result->trade_state}' where md5(id) = '{$result->out_trade_no}'";
     			$this->db->query($sql);

@@ -14,21 +14,8 @@ function onBridgeReady(){
 	       },
 	       function(res){  
 	           if(res.err_msg == "get_brand_wcpay_request:ok" ) {
-	        	   $.ajax({
-	        		   type: 'GET',
-	        		   url: '<?php echo site_url("index/get_order_info");?>',
-	        		   data: {'out_trade_no':'{out_trade_no}'},
-	        		   success: function(data){
-		        		   if(data == "success")
-		        		   {
-	        		  	 	window.location.href='<?php echo site_url("index/order_success");?>';
-		        		   }else{
-			        		   alert(data);
-		        		   }
-	        		   }
-	        		 });
-		           } 
-	           else{
+	        		window.location.href='<?php echo site_url("index/get_order_info?out_trade_no={out_trade_no}");?>';
+		       }else{
 		           alert(res.err_msg);
 	           }    // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。 
 	       }
