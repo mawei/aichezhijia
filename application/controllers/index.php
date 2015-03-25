@@ -327,7 +327,7 @@ class index extends CI_Controller {
     	$data['appid'] = 'wx13facdc7a21c75b6';
     	$data['mch_id'] = '1227215102';
     	$data['nonce_str'] = md5(rand(100000, 99999));
-    	$data['out_trade_no'] = strtolower($_REQUEST['out_trade_no']);
+    	$data['out_trade_no'] = strtolower($_GET['out_trade_no']);
        	//$data['out_trade_no'] = "C0C7C76D30BD3DCAEFC96F40275BDC0A";
        	$string = "appid={$data['appid']}&mch_id={$data['mch_id']}&nonce_str={$data['nonce_str']}&out_trade_no={$data['out_trade_no']}";
        	$string = $string . "&key=7c914cc19e472a13e7b93aad9aa7bc69";
