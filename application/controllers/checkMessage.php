@@ -43,7 +43,7 @@ class checkMessage extends CI_Controller
 						"first"=>array("value" => "恭喜你，购买成功", "color"=>"#173177"),
 						"keyword1"=>array("value" => $info['name'], "color"=>"#173177"),
 						"keyword2"=>array("value" => $info['id'], "color"=>"#173177"),
-						"keyword3"=>array("value" => $info['price'], "color"=>"#173177"),
+						"keyword3"=>array("value" => ($info['price']/100)."元", "color"=>"#173177"),
 						"keyword4"=>array("value" => $info['create_time'], "color"=>"#173177"),
 						"remark"=>array("value" => "欢迎再次购买", "color"=>"#173177")
 				)

@@ -1,4 +1,5 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+require_once 'checkMessage.php';
 
 class index extends CI_Controller {
 
@@ -221,6 +222,11 @@ class index extends CI_Controller {
 		
 	}
 	
+	public function order_success()
+	{
+		$this->parser->parse('order_success',$this->data);
+	}
+	
 	public function submit_order()
 	{
 		$product = addslashes($_POST['product']);
@@ -291,6 +297,7 @@ class index extends CI_Controller {
 			$this->data['name'] = $p['name'];
 			$this->data['price'] = $p['price'];
 			$this->data['date'] = $p['date'];
+			$this->data['out_trade_no'] = md5($p['id']);
 			$this->parser->parse('order_confirm',$this->data);
 		}else{
 			echo $result->return_code.$result->return_msg;
@@ -315,6 +322,54 @@ class index extends CI_Controller {
         return $xml; 
     }
 	
+    //feedback
+    public function get_order_info()
+    {
+    	$data['appid'] = 'wx13facdc7a21c75b6';
+    	$data['mch_id'] = '1227215102';
+    	$data['nonce_str'] = md5(rand(100000, 99999));
+    	//$data['out_trade_no'] = strtolower($_REQUEST['out_trade_no']);
+       	$data['out_trade_no'] = "C0C7C76D30BD3DCAEFC96F40275BDC0A";
+       	$string = "appid={$data['appid']}&mch_id={$data['mch_id']}&nonce_str={$data['nonce_str']}&out_trade_no={$data['out_trade_no']}";
+       	$string = $string . "&key=7c914cc19e472a13e7b93aad9aa7bc69";
+       	$data['sign'] = strtoupper(MD5($string));
+       	
+       	$post_data = $this->arrayToXml($data);
+       	$ch = curl_init();
+       	// 设置选项，包括URL
+       	curl_setopt ( $ch, CURLOPT_URL, "https://api.mch.weixin.qq.com/pay/orderquery" );
+       	curl_setopt($ch, CURLOPT_HEADER, 0);//设置header
+       	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);//要求结果为字符串且输出到屏幕上
+       	curl_setopt($ch, CURLOPT_POST, 1);//post提交方式
+       	curl_setopt ( $ch, CURLOPT_SSL_VERIFYHOST, 2);
+       	curl_setopt ( $ch, CURLOPT_SSL_VERIFYPEER, false);
+       	// post的变量
+       	curl_setopt ( $ch, CURLOPT_POSTFIELDS, $post_data );
+       	
+       	$output = curl_exec ( $ch );
+       	libxml_disable_entity_loader ( true );
+       	$result = simplexml_load_string ( $output, 'SimpleXMLElement', LIBXML_NOCDATA );
+       	if($result->return_code == "SUCCESS")
+       	{
+       		if($result->trade_state == "SUCCESS")
+       		{
+       			$sql = "update `order` set status='已付款' where md5(id) = '{$data['out_trade_no']}'";
+       			$this->db->query($sql);
+       			$order = $this->db->query("select t1.*,t2.name,t2.price from `order` t1 left join `product` t2 on t1.product_id=t2.id where md5(t1.id) = '{$data['out_trade_no']}' ")->result_array()[0];
+       			$checkMessage = new checkMessage();
+       			$checkMessage->MessagePaySuccess($order);
+       			echo 'success';
+       		}else{
+    			$sql = "update `order` set status='{$result->trade_state}' where md5(id) = '{$result->out_trade_no}'";
+    			$this->db->query($sql);
+    			echo 'failed';
+    		}
+       	}else{
+       		echo 'failed';
+       	}
+    }
+    
+    
 	public function registerpost()
 	{
 		$username = addslashes($_POST['username']);
