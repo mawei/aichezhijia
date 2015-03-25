@@ -18,7 +18,14 @@ function onBridgeReady(){
 	        		   type: 'GET',
 	        		   url: '<?php echo site_url("index/get_order_info");?>',
 	        		   data: {'out_trade_no':'{out_trade_no}'},
-	        		   success: window.location.href='<?php echo site_url("index/order_success");?>',
+	        		   success: function(data){
+		        		   if(data == "success")
+		        		   {
+	        		  	 	window.location.href='<?php echo site_url("index/order_success");?>';
+		        		   }else{
+			        		   alert(data);
+		        		   }
+	        		   }
 	        		 });
 		           } 
 	           else{
