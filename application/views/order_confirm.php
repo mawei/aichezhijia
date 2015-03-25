@@ -37,6 +37,7 @@ function onBridgeReady(){
 
 $(function(){
 	$("#getBrandWCPayRequest").click(function(){
+
 		if (typeof WeixinJSBridge == "undefined"){
 			   if( document.addEventListener ){
 			       document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);

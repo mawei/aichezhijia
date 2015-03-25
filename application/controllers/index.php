@@ -361,10 +361,10 @@ class index extends CI_Controller {
        		}else{
     			$sql = "update `order` set status='{$result->trade_state}' where md5(id) = '{$result->out_trade_no}'";
     			$this->db->query($sql);
-    			echo 'failed';
+    			echo $result->trade_state;
     		}
        	}else{
-       		echo 'failed';
+       		echo $result->return_code;
        	}
     }
     
