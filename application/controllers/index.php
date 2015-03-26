@@ -463,16 +463,43 @@ class index extends CI_Controller {
 		$loginResult = $this->needlogin();
 		if($loginResult == 'success')
 		{
-			$records = $this->db->query("select * from insurance where userid={$this->session->userdata('userid')}")->result_array();;
-			foreach ($records as $k=>$v)
-			{
-				$records[$k]['image'] = base_url('assets/uploads/files/' . $v['image']);
-				$records[$k]['ID_front_image'] = base_url('assets/uploads/files/' . $v['ID_front_image']);
-				$records[$k]['ID_back_image'] = base_url('assets/uploads/files/' . $v['ID_back_image']);
-				$records[$k]['bank_image'] = base_url('assets/uploads/files/' . $v['bank_image']);
-			}
+			$records = $this->db->query("select * from user where id={$this->session->userdata('userid')}")->result_array();
 			$this->data['records'] = $records;
 			$this->parser->parse('insurancelist',$this->data);
+		}
+		elseif($loginResult != '')
+		{
+			redirect("index/login?weixinID={$loginResult}");
+		}
+	}
+	
+	public function edit_insurance()
+	{
+		$loginResult = $this->needlogin();
+		if($loginResult == 'success')
+		{
+			$type = $_POST['type'];
+			//echo getcwd().'assets/uploads/files/';die();
+			$config['upload_path'] = getcwd().'/assets/uploads/files/';
+			$config['allowed_types'] = 'gif|jpg|png|jpeg';
+			$this->load->library('upload', $config);
+			$this->upload->initialize($config);
+			if ( ! $this->upload->do_upload($type))
+			{
+				echo $this->upload->display_errors();
+				echo "上传失败";
+			}
+			else
+			{
+				$path = $this->upload->data()['file_name'];
+				$data[$type] = $path;
+				$this->db->query("update user set {$type}='{$path}' where id={$this->session->userdata('userid')}");
+				
+				$records = $this->db->query("select * from user where id={$this->session->userdata('userid')}")->result_array();
+				$this->data['records'] = $records;
+				$this->parser->parse('insurancelist',$this->data);
+				
+			}
 		}
 		elseif($loginResult != '')
 		{
