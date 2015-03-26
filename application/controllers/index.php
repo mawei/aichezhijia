@@ -355,9 +355,12 @@ class index extends CI_Controller {
        		{
        			$sql = "update `order` set status='已付款' where md5(id) = '{$data['out_trade_no']}'";
        			$this->db->query($sql);
-       			$order = $this->db->query("select t1.*,t2.name,t2.price from `order` t1 left join `product` t2 on t1.product_id=t2.id where md5(t1.id) = '{$data['out_trade_no']}' ")->result_array()[0];
+       			$order = $this->db->query("select t1.*,t2.name as product_name,t2.price,t3.name from `order` t1 left join `product` t2 on t1.product_id=t2.id
+       					left join user t3 on t1.user_id=t3.id where md5(t1.id) = '{$data['out_trade_no']}' ")->result_array()[0];
        			$checkMessage = new checkMessage();
        			$checkMessage->MessagePaySuccess($order);
+       			$checkMessage->send_message_to_kf($order['buyer_openid'],"{$order['name']}已成功预约，项目：{$order['product_name']},时间：{$order['date']}");
+       			
 				$this->parser->parse('order_success',$this->data);
        		}else{
     			$sql = "update `order` set status='{$result->trade_state}' where md5(id) = '{$result->out_trade_no}'";

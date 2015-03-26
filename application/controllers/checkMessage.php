@@ -198,6 +198,28 @@ class checkMessage extends CI_Controller
 		echo $output_array;
 	}
 	
+	public function send_message_to_kf($openid, $content)
+	{
+		$url = "https://api.weixin.qq.com/merchant/order/getbyid?access_token={$this->getAccessToken()}";
+		$data['touser'] = $openid;
+		$data['msgtype'] = "text";
+		$data['text']['content'] = $content;
+		$data['customservice']['kf_account'] = '001@love_the_car';
+		$ch = curl_init ();
+		curl_setopt ( $ch, CURLOPT_URL, $url );
+		curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, 1 );
+		curl_setopt ( $ch, CURLOPT_SSL_VERIFYHOST, 2);
+		curl_setopt ( $ch, CURLOPT_SSL_VERIFYPEER, false);
+		
+		// post数据
+		curl_setopt ( $ch, CURLOPT_POST, 1 );
+		// post的变量
+		curl_setopt ( $ch, CURLOPT_POSTFIELDS, $data );
+		$output = curl_exec ( $ch );
+		//$output_array = json_decode ( $output, true );
+		curl_close ( $ch );
+	}
+	
 	public function saveMessage($openid,$message_id,$templete_id,$status)
 	{
 		//echo $openid;
