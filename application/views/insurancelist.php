@@ -8,15 +8,13 @@
 
   
   <ul data-am-widget="gallery" class="am-gallery am-avg-sm-2
-  am-avg-md-3 am-avg-lg-4 am-gallery-overlay" data-am-gallery="{ pureview: true }">
+  am-avg-md-3 am-avg-lg-4 am-gallery-default" data-am-gallery="{ pureview: true }">
   <li>
     <div class="am-gallery-item">
-      <a href="{xingshi_image}"
-      class="">
         <img src="{xingshi_image}"
          />
         <h3 class="am-gallery-title">行驶证</h3>
-      </a>
+        <div class="am-gallery-desc"><input type="file" capture="camera" accept="image/*" id="cameraInput" name="cameraInput"></div>
     </div>
   </li>
   <li>
@@ -84,7 +82,7 @@
   </li>
 </ul>
   {/records}
-<input type="file" capture="camera" accept="image/*" id="cameraInput" name="cameraInput">
+
   
 </body>
 </html>
