@@ -203,7 +203,7 @@ class checkMessage extends CI_Controller
 		$url = "https://api.weixin.qq.com/merchant/order/getbyid?access_token={$this->getAccessToken()}";
 		$data['touser'] = $openid;
 		$data['msgtype'] = "text";
-		$data['text']['content'] = urldecode($content);
+		$data['text']['content'] = urlencode($content);
 		$data['customservice']['kf_account'] = '001@love_the_car';
 		$json_data = json_encode($data);
 		
