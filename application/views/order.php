@@ -22,8 +22,8 @@
     <label for="doc-ipt-pwd-2">预约日期</label>
         <input type="text" id="doc-ipt-3" name="date" value="" placeholder="预约日期" data-am-datepicker required readonly/>
   </div>
-
-      <button type="submit" class="am-btn am-btn-default">提交</button>
+		    <button type="submit" class="am-btn am-btn-primary am-btn-block">提交订单</button>
+  
   </fieldset>
 </form>
   

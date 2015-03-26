@@ -80,10 +80,10 @@ $(function(){
 		      <input type="hidden" id="doc-ipt-3" name="orderid" value="{id}">
 		    </div>
 		  </div>
+		  </li>
+		  <li>
 		  <div class="am-form-group">
-		    <div class="am-u-sm-10 am-u-sm-offset-2">
-		    <button class="am-btn am-btn-secondary" type="button" id="getBrandWCPayRequest">确认支付</button>
-		    </div>
+		    <button type="button" class="am-btn am-btn-primary am-btn-block" id="getBrandWCPayRequest">确认支付</button>
 		  </div>
 	  </li>
       </ul>
