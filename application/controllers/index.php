@@ -641,7 +641,7 @@ class index extends CI_Controller {
 				$phone = $_POST['phone'];
 				$carmodel = $_POST['carmodel'];
 				$wheel = $_POST['wheel'];
-				$wheel = $_POST['chepai'];
+				$chepai = $_POST['chepai'];
 				$this->db->query("update `user` set name='{$name}',phone='{$phone}',carmodel='{$carmodel}',wheel='{$wheel}',chepai='{$chepai}' where id={$this->session->userdata('userid')}");
 				redirect("index/profile");
 			}else{
