@@ -516,7 +516,7 @@ class index extends CI_Controller {
 		$loginResult = $this->needlogin();
 		if($loginResult == 'success')
 		{
-			$orders = $this->db->query("select t1.*,t2.name,t2.price from `order` t1 left join product t2 on t1.product_id = t2.id where t1.buyer_openid	={$this->session->userdata('userid')} and t1.status='已付款' order by t1.create_time desc");
+			$orders = $this->db->query("select t1.*,t2.name,t2.price from `order` t1 left join product t2 on t1.product_id = t2.id where t1.user_id={$this->session->userdata('userid')} and t1.status='已付款' order by t1.create_time desc");
 			$this->data['orders'] = $orders->result_array();
 			$this->parser->parse('orderlist',$this->data);
 		}elseif($loginResult != '')
