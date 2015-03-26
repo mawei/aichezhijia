@@ -203,7 +203,7 @@ class checkMessage extends CI_Controller
 		$url = "https://api.weixin.qq.com/merchant/order/getbyid?access_token={$this->getAccessToken()}";
 		$data['touser'] = $openid;
 		$data['msgtype'] = "text";
-		$data['text']['content'] = $content;
+		$data['text']['content'] = urldecode($content);
 		$data['customservice']['kf_account'] = '001@love_the_car';
 		$json_data = json_encode($data);
 		
@@ -218,7 +218,8 @@ class checkMessage extends CI_Controller
 		// post的变量
 		curl_setopt ( $ch, CURLOPT_POSTFIELDS, $json_data );
 		$output = curl_exec ( $ch );
-		//$output_array = json_decode ( $output, true );
+		$output_array = json_decode ( $output, true );
+		print_r($output_array);
 		curl_close ( $ch );
 	}
 	
