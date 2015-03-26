@@ -69,6 +69,18 @@ class Admin extends CI_Controller {
 		$this->load->view('UserManagement',$output);
 	}
 	
+	public function product()
+	{
+		$crud = new grocery_CRUD();
+		$crud->set_table('product');
+		$crud->set_subject('预约项目');
+		$crud->display_as('name','项目名称');
+		$crud->display_as('price','价格（单位：分，只能输入整数）');
+		$output = $crud->render();
+		$this->load->view('UserManagement',$output);
+	}
+	
+	
 	public function order()
 	{
 		$crud = new grocery_CRUD();

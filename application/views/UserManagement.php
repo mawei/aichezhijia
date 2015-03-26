@@ -60,7 +60,8 @@ foreach($css_files as $file): ?>
                 <li><a href='<?php echo site_url('admin/user')?>'>用户管理</a></li>
 				<li><a href='<?php echo site_url('admin/order')?>'>订单管理</a></li>
                 <li><a href='<?php echo site_url('admin/shop')?>'>分店管理</a></li>
-   				<li><a href='<?php echo site_url('admin/maintenance_record')?>'>保养记录管理</a></li>
+				                <li><a href='<?php echo site_url('admin/product')?>'>项目管理</a></li>
+				   				<li><a href='<?php echo site_url('admin/maintenance_record')?>'>保养记录管理</a></li>
 				<li><a href='<?php echo site_url('admin/insurance')?>'>保险管理</a></li>
 				<li><a href='<?php echo site_url('admin/appointment')?>'>预约管理</a></li>
 				<li><a href='<?php echo site_url('admin/news')?>'>新闻管理</a></li>
