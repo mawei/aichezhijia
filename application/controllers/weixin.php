@@ -2,7 +2,7 @@
 require_once 'checkMessage.php';
 if (! defined ( 'BASEPATH' ))
 	exit ( 'No direct script access allowed' );
-class Weixin extends CI_Controller {
+class weixin extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
@@ -103,7 +103,6 @@ class wechatCallbackapiTest  extends CI_Controller {
 	
 	public function responseMsg() {
 		// get post data, May be due to the different environments
-		
 		$postStr = $GLOBALS ["HTTP_RAW_POST_DATA"];
 		// extract post data
 		if (! empty ( $postStr )) {
@@ -144,7 +143,6 @@ class wechatCallbackapiTest  extends CI_Controller {
 					$this->db->query("update `message` set status='{$status}' where message_id='{$msgid}'");
 				}
 			}
-			
 			$xmlTpl = "<xml>
 						<ToUserName><![CDATA[%s]]></ToUserName>
 						<FromUserName><![CDATA[%s]]></FromUserName>
@@ -159,8 +157,6 @@ class wechatCallbackapiTest  extends CI_Controller {
 		}
 	}
 	
-
-	
 	private function getOrderInfo($orderid) {
 		$url = site_url("checkMessage/getOrderById/".$orderid);
 		$ch = curl_init ();
@@ -173,9 +169,6 @@ class wechatCallbackapiTest  extends CI_Controller {
 		// 打印获得的数据
 		return $output_array;
 	}
-	
-		
-	
 	
 	private function checkSignature() {
 		// you must define TOKEN by yourself
