@@ -13,8 +13,8 @@
       <li class="am-g am-list-item-dated">
         <a onclick="javascript:void(0)" class="am-list-item-hd ">{product_name}</a>
         <div class="am-list-item-text">
-        	<p>数量：{product_count} 价格：{product_price} 总价：{order_total_price} </p>
-	   		<p>时间：{order_create_time}</p>
+        	<p>项目：{name} 定金：({price}/100) 预约时间：{date} </p>
+	   		<p>订单创建时间：{create_time}</p>
         </div>
       </li>
     </ul>
