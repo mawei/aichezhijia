@@ -175,13 +175,10 @@ class wechatCallbackapiTest  extends CI_Controller {
                         <Content><![CDATA[%s]]></Content>
                         <FuncFlag>0</FuncFlag>
                         </xml>";
-			if($keyword == "?" || $keyword == "？")
-			{
 				$msgType = "text";
 				$contentStr = date("Y-m-d H:i:s",time());
-				$resultStr = sprintf($textTpl, $fromUsername, $toUsername, $time, $msgType, $contentStr);
+				$resultStr = sprintf($textTpl, $fromUsername, $toUsername, $time, $msgType, "");
 				echo $resultStr;
-			}
 		}else{
 			echo "";
 			exit;
