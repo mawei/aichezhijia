@@ -205,6 +205,8 @@ class checkMessage extends CI_Controller
 		$data['msgtype'] = "text";
 		$data['text']['content'] = $content;
 		$data['customservice']['kf_account'] = '001@love_the_car';
+		$json_data = json_encode($data);
+		
 		$ch = curl_init ();
 		curl_setopt ( $ch, CURLOPT_URL, $url );
 		curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, 1 );
@@ -214,7 +216,7 @@ class checkMessage extends CI_Controller
 		// post数据
 		curl_setopt ( $ch, CURLOPT_POST, 1 );
 		// post的变量
-		curl_setopt ( $ch, CURLOPT_POSTFIELDS, $data );
+		curl_setopt ( $ch, CURLOPT_POSTFIELDS, $json_data );
 		$output = curl_exec ( $ch );
 		//$output_array = json_decode ( $output, true );
 		curl_close ( $ch );
