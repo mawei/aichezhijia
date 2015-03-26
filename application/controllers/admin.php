@@ -69,6 +69,22 @@ class Admin extends CI_Controller {
 		$this->load->view('UserManagement',$output);
 	}
 	
+	public function order()
+	{
+		$crud = new grocery_CRUD();
+		$crud->set_table('order');
+		$crud->set_subject('订单管理');
+		$crud->display_as('date','预约时间');
+		$crud->display_as('user_id','用户');
+		$crud->display_as('status','付款状态');
+		$crud->display_as('product_id','购买项目');
+		$crud->display_as('create_time','创建时间');
+		$crud->set_relation('user_id','user','username');
+		$crud->set_relation('product_id','product','name');
+		$output = $crud->render();
+		$this->load->view('UserManagement',$output);
+	}
+	
 	public function worker()
 	{
 		$crud = new grocery_CRUD();

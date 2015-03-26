@@ -479,7 +479,6 @@ class index extends CI_Controller {
 		if($loginResult == 'success')
 		{
 			$type = $_POST['type'];
-			//echo getcwd().'assets/uploads/files/';die();
 			$config['upload_path'] = getcwd().'/assets/uploads/files/';
 			$config['allowed_types'] = 'gif|jpg|png|jpeg';
 			$this->load->library('upload', $config);
@@ -496,8 +495,8 @@ class index extends CI_Controller {
 				$this->db->query("update user set {$type}='{$path}' where id={$this->session->userdata('userid')}");
 				
 				$records = $this->db->query("select * from user where id={$this->session->userdata('userid')}")->result_array();
-				$this->data['records'] = $records;
-				$this->parser->parse('insurancelist',$this->data);
+				$this->data['user'] = $records;
+				$this->parser->parse('editprofile',$this->data);
 				
 			}
 		}
@@ -664,13 +663,39 @@ class index extends CI_Controller {
 		{
 			if(isset($_POST['name']))
 			{
-				$name = $_POST['name'];
-				$phone = $_POST['phone'];
-				$carmodel = $_POST['carmodel'];
-				$wheel = $_POST['wheel'];
-				$chepai = $_POST['chepai'];
-				$this->db->query("update `user` set name='{$name}',phone='{$phone}',carmodel='{$carmodel}',wheel='{$wheel}',chepai='{$chepai}' where id={$this->session->userdata('userid')}");
-				redirect("index/profile");
+				$type = $_POST['type'];
+				if($type != "")
+				{
+					$config['upload_path'] = getcwd().'/assets/uploads/files/';
+					$config['allowed_types'] = 'gif|jpg|png|jpeg';
+					$this->load->library('upload', $config);
+					$this->upload->initialize($config);
+					if ( ! $this->upload->do_upload($type))
+					{
+						echo $this->upload->display_errors();
+						echo "上传失败";
+					}else{
+						$path = $this->upload->data()['file_name'];
+						$data[$type] = $path;
+						$name = $_POST['name'];
+						$phone = $_POST['phone'];
+						$carmodel = $_POST['carmodel'];
+						$wheel = $_POST['wheel'];
+						$chepai = $_POST['chepai'];
+						$this->db->query("update `user` set {$type}='{$path}', name='{$name}',phone='{$phone}',carmodel='{$carmodel}',wheel='{$wheel}',chepai='{$chepai}' where id={$this->session->userdata('userid')}");
+						$records = $this->db->query("select * from user where id={$this->session->userdata('userid')}")->result_array();
+						$this->data['user'] = $records;
+						$this->parser->parse('editprofile',$this->data);
+					}
+				}else{
+					$name = $_POST['name'];
+					$phone = $_POST['phone'];
+					$carmodel = $_POST['carmodel'];
+					$wheel = $_POST['wheel'];
+					$chepai = $_POST['chepai'];
+					$this->db->query("update `user` set name='{$name}',phone='{$phone}',carmodel='{$carmodel}',wheel='{$wheel}',chepai='{$chepai}' where id={$this->session->userdata('userid')}");
+					redirect("index/profile");
+				}
 			}else{
 				$query = $this->db->query("select * from `user` where id={$this->session->userdata('userid')}");
 				$this->data['user'] = $query->result_array();
