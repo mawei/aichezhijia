@@ -278,26 +278,31 @@ class index extends CI_Controller {
 		//print_r($postObj);die();
 		if($result->return_code == "SUCCESS")
 		{
-			
-			$this->data['timeStamp'] = time();
-			$this->data['appId'] = $result->appid;
-			$this->data['nonceStr'] = md5(rand(100000, 99999));; 
-			$this->data['signType'] = 'MD5';
-			$this->data['package'] = "prepay_id=".$result->prepay_id;
-						
-			$string = "appId={$this->data['appId']}&nonceStr={$this->data['nonceStr']}&package={$this->data['package']}&signType=MD5&timeStamp={$this->data['timeStamp']}";
-			$string = $string . "&key=7c914cc19e472a13e7b93aad9aa7bc69";
-			$this->data['paySign'] = strtoupper(MD5($string));
+			if($result->result_code == "SUCCESS")
+			{
+				$this->data['timeStamp'] = time();
+				$this->data['appId'] = $result->appid;
+				$this->data['nonceStr'] = md5(rand(100000, 99999));;
+				$this->data['signType'] = 'MD5';
+				$this->data['package'] = "prepay_id=".$result->prepay_id;
 				
-			//$this->data['paySign'] = $result->sign;
-			$this->data['phone'] = $p['phone'];
-			$this->data['chepai'] = $p['chepai'];
-			$this->data['carmodel'] = $p['carmodel'];
-			$this->data['name'] = $p['name'];
-			$this->data['price'] = $p['price'];
-			$this->data['date'] = $p['date'];
-			$this->data['out_trade_no'] = md5($p['id']);
-			$this->parser->parse('order_confirm',$this->data);
+				$string = "appId={$this->data['appId']}&nonceStr={$this->data['nonceStr']}&package={$this->data['package']}&signType=MD5&timeStamp={$this->data['timeStamp']}";
+				$string = $string . "&key=7c914cc19e472a13e7b93aad9aa7bc69";
+				$this->data['paySign'] = strtoupper(MD5($string));
+				
+				//$this->data['paySign'] = $result->sign;
+				$this->data['phone'] = $p['phone'];
+				$this->data['chepai'] = $p['chepai'];
+				$this->data['carmodel'] = $p['carmodel'];
+				$this->data['name'] = $p['name'];
+				$this->data['price'] = $p['price'];
+				$this->data['date'] = $p['date'];
+				$this->data['out_trade_no'] = md5($p['id']);
+				$this->parser->parse('order_confirm',$this->data);
+			}else{
+				echo $result;
+			}
+			
 		}else{
 			echo $result->return_code.$result->return_msg;
 		}
