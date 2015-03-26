@@ -300,7 +300,7 @@ class index extends CI_Controller {
 				$this->data['out_trade_no'] = md5($p['id']);
 				$this->parser->parse('order_confirm',$this->data);
 			}else{
-				echo $result->return_msg;
+				echo $result->result_code.'|'.$result->err_code.'|'.$result->err_code_des;
 			}
 			
 		}else{
