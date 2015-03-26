@@ -172,12 +172,8 @@ class wechatCallbackapiTest  extends CI_Controller {
                         <FromUserName><![CDATA[%s]]></FromUserName>
                         <CreateTime>%s</CreateTime>
                         <MsgType><![CDATA[%s]]></MsgType>
-                        <Content><![CDATA[%s]]></Content>
-                        <FuncFlag>0</FuncFlag>
                         </xml>";
-				$msgType = "text";
-				$contentStr = date("Y-m-d H:i:s",time());
-				$resultStr = sprintf($textTpl, $fromUsername, $toUsername, $time, $msgType, "");
+				$resultStr = sprintf($textTpl, $fromUsername, $toUsername, $time, 'transfer_customer_service');
 				echo $resultStr;
 		}else{
 			echo "";

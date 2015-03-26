@@ -200,7 +200,7 @@ class checkMessage extends CI_Controller
 	
 	public function send_message_to_kf($openid, $content)
 	{
-		$url = "https://api.weixin.qq.com/merchant/order/getbyid?access_token={$this->getAccessToken()}";
+		$url = "https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token={$this->getAccessToken()}";
 		$data['touser'] = $openid;
 		$data['msgtype'] = "text";
 		$data['text']['content'] = urlencode($content);
