@@ -55,8 +55,9 @@
       class="">
         <img src="{image}"
          />
-        <h3 class="am-gallery-title">车损险保单照片</h3>
+        <h3 class="am-gallery-title">车损险保单照片
         <input type="file" capture="camera" accept="image/*" id="cameraInput" name="cameraInput">
+      	</h3>
       </a>
     </div>
   </li>
