@@ -212,6 +212,10 @@ class index extends CI_Controller {
 		if($loginResult == 'success')
 		{
 			$products = $this->db->query("select * from product")->result_array();
+			foreach ($products as $k=>$v)
+			{
+				$products[$k]['price'] = $v['price']/100;
+			}
 			$this->data['products'] = $products;
 			$this->parser->parse('order',$this->data);
 		}elseif($loginResult != '')
@@ -295,7 +299,7 @@ class index extends CI_Controller {
 				$this->data['chepai'] = $p['chepai'];
 				$this->data['carmodel'] = $p['carmodel'];
 				$this->data['name'] = $p['name'];
-				$this->data['price'] = $p['price'];
+				$this->data['price'] = $p['price']/100;
 				$this->data['date'] = $p['date'];
 				$this->data['out_trade_no'] = md5($p['id']);
 				$this->parser->parse('order_confirm',$this->data);
