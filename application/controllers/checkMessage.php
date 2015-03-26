@@ -201,25 +201,29 @@ class checkMessage extends CI_Controller
 	public function send_message_to_kf($openid, $content)
 	{
 		$url = "https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token={$this->getAccessToken()}";
-		$data['touser'] = $openid;
-		$data['msgtype'] = "text";
-		$data['text']['content'] = urlencode($content);
-		$json = json_encode($data);
-		$json_data = urldecode($json);
-		$ch = curl_init ();
-		curl_setopt ( $ch, CURLOPT_URL, $url );
-		curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, 1 );
-		curl_setopt ( $ch, CURLOPT_SSL_VERIFYHOST, 2);
-		curl_setopt ( $ch, CURLOPT_SSL_VERIFYPEER, false);
-		
-		// post数据
-		curl_setopt ( $ch, CURLOPT_POST, 1 );
-		// post的变量
-		curl_setopt ( $ch, CURLOPT_POSTFIELDS, $json_data );
-		$output = curl_exec ( $ch );
-		$output_array = json_decode ( $output, true );
-		print_r($output_array);
-		curl_close ( $ch );
+		$admins = $this->db->query("select weixinID from user where is_admin='y' and weixinID!=''")->result_array();
+		foreach ($admins as $admin)
+		{
+			$data['touser'] = $admin['weixinID'];
+			$data['msgtype'] = "text";
+			$data['text']['content'] = urlencode($content);
+			$json = json_encode($data);
+			$json_data = urldecode($json);
+			$ch = curl_init ();
+			curl_setopt ( $ch, CURLOPT_URL, $url );
+			curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, 1 );
+			curl_setopt ( $ch, CURLOPT_SSL_VERIFYHOST, 2);
+			curl_setopt ( $ch, CURLOPT_SSL_VERIFYPEER, false);
+			
+			// post数据
+			curl_setopt ( $ch, CURLOPT_POST, 1 );
+			// post的变量
+			curl_setopt ( $ch, CURLOPT_POSTFIELDS, $json_data );
+			$output = curl_exec ( $ch );
+			$output_array = json_decode ( $output, true );
+			//print_r($output_array);
+			curl_close ( $ch );
+		}
 	}
 	
 	public function saveMessage($openid,$message_id,$templete_id,$status)
