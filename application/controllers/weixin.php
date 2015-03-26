@@ -101,59 +101,90 @@ class wechatCallbackapiTest  extends CI_Controller {
 		}
 	}
 	
-	public function responseMsg() {
-		// get post data, May be due to the different environments
-		$postStr = $GLOBALS ["HTTP_RAW_POST_DATA"];
-		// extract post data
-		if (! empty ( $postStr )) {
-			/*
-			 * libxml_disable_entity_loader is to prevent XML eXternal Entity Injection, the best way is to check the validity of xml by yourself
-			 */
-			libxml_disable_entity_loader ( true );
-			$postObj = simplexml_load_string ( $postStr, 'SimpleXMLElement', LIBXML_NOCDATA );
+// 	public function responseMsg() {
+// 		// get post data, May be due to the different environments
+// 		$postStr = $GLOBALS ["HTTP_RAW_POST_DATA"];
+// 		// extract post data
+// 		if (! empty ( $postStr )) {
+// 			/*
+// 			 * libxml_disable_entity_loader is to prevent XML eXternal Entity Injection, the best way is to check the validity of xml by yourself
+// 			 */
+// 			libxml_disable_entity_loader ( true );
+// 			$postObj = simplexml_load_string ( $postStr, 'SimpleXMLElement', LIBXML_NOCDATA );
 			
-			$log['message'] = $postObj;
-			$this->db->insert('log', $log);
+// 			$log['message'] = $postObj;
+// 			$this->db->insert('log', $log);
 				
+// 			$fromUsername = $postObj->FromUserName;
+// 			$toUsername = $postObj->ToUserName;
+// 			$keyword = trim ( $postObj->Content );
+// 			$time = time ();
+			
+// 			$msgtype = $postObj->MsgType;
+// 			$event = $postObj->Event;
+			
+// 			$log['message'] = $msgtype."&".$event;
+// 			$this->db->insert('log', $log);
+// 			if($msgtype == "event")
+// 			{
+// 				if($event == "merchant_order")
+// 				{
+// 					$checkMessage = new checkMessage();
+// 					$order = $checkMessage->getOrderById($postObj->OrderId)['order'];
+// 					$log['message'] = $postObj->OrderId;
+// 					$this->db->insert('log', $log);
+// 					$order['order_create_time'] = date("Y-m-d H:i:s",$order['order_create_time']);
+// 					$order['order_id'] = $postObj->OrderId;
+// 					$this->db->insert('order', $order);
+// 					$checkMessage->MessagePaySuccess($order);
+// 				}else if ($event == "TEMPLATESENDJOBFINISH"){
+// 					$status = $postObj->Status;
+// 					$msgid = $postObj->MsgID;
+// 					$this->db->query("update `message` set status='{$status}' where message_id='{$msgid}'");
+// 				}
+// 			}
+// 			$xmlTpl = "<xml>
+// 						<ToUserName><![CDATA[%s]]></ToUserName>
+// 						<FromUserName><![CDATA[%s]]></FromUserName>
+// 						<CreateTime>%s</CreateTime>
+// 						<MsgType><![CDATA[transfer_customer_service]]></MsgType>
+// 						</xml>";
+// 			$result = sprintf ( $xmlTpl, $fromUsername, $toUsername, time () );
+// 			echo $result;
+// 		} else {
+// 			echo "";
+// 			exit ();
+// 		}
+// 	}
+
+	public function responseMsg()
+	{
+		$postStr = $GLOBALS["HTTP_RAW_POST_DATA"];
+	
+		if (!empty($postStr)){
+			$postObj = simplexml_load_string($postStr, 'SimpleXMLElement', LIBXML_NOCDATA);
 			$fromUsername = $postObj->FromUserName;
 			$toUsername = $postObj->ToUserName;
-			$keyword = trim ( $postObj->Content );
-			$time = time ();
-			
-			$msgtype = $postObj->MsgType;
-			$event = $postObj->Event;
-			
-			$log['message'] = $msgtype."&".$event;
-			$this->db->insert('log', $log);
-			if($msgtype == "event")
+			$keyword = trim($postObj->Content);
+			$time = time();
+			$textTpl = "<xml>
+                        <ToUserName><![CDATA[%s]]></ToUserName>
+                        <FromUserName><![CDATA[%s]]></FromUserName>
+                        <CreateTime>%s</CreateTime>
+                        <MsgType><![CDATA[%s]]></MsgType>
+                        <Content><![CDATA[%s]]></Content>
+                        <FuncFlag>0</FuncFlag>
+                        </xml>";
+			if($keyword == "?" || $keyword == "？")
 			{
-				if($event == "merchant_order")
-				{
-					$checkMessage = new checkMessage();
-					$order = $checkMessage->getOrderById($postObj->OrderId)['order'];
-					$log['message'] = $postObj->OrderId;
-					$this->db->insert('log', $log);
-					$order['order_create_time'] = date("Y-m-d H:i:s",$order['order_create_time']);
-					$order['order_id'] = $postObj->OrderId;
-					$this->db->insert('order', $order);
-					$checkMessage->MessagePaySuccess($order);
-				}else if ($event == "TEMPLATESENDJOBFINISH"){
-					$status = $postObj->Status;
-					$msgid = $postObj->MsgID;
-					$this->db->query("update `message` set status='{$status}' where message_id='{$msgid}'");
-				}
+				$msgType = "text";
+				$contentStr = date("Y-m-d H:i:s",time());
+				$resultStr = sprintf($textTpl, $fromUsername, $toUsername, $time, $msgType, $contentStr);
+				echo $resultStr;
 			}
-			$xmlTpl = "<xml>
-						<ToUserName><![CDATA[%s]]></ToUserName>
-						<FromUserName><![CDATA[%s]]></FromUserName>
-						<CreateTime>%s</CreateTime>
-						<MsgType><![CDATA[transfer_customer_service]]></MsgType>
-						</xml>";
-			$result = sprintf ( $xmlTpl, $fromUsername, $toUsername, time () );
-			echo $result;
-		} else {
+		}else{
 			echo "";
-			exit ();
+			exit;
 		}
 	}
 	
