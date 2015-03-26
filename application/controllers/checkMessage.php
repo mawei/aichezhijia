@@ -204,8 +204,8 @@ class checkMessage extends CI_Controller
 		$data['touser'] = $openid;
 		$data['msgtype'] = "text";
 		$data['text']['content'] = urlencode($content);
-		$json_data = json_encode($data);
-		
+		$json = json_encode($data);
+		$json_data = urldecode($json);
 		$ch = curl_init ();
 		curl_setopt ( $ch, CURLOPT_URL, $url );
 		curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, 1 );
