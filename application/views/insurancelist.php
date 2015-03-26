@@ -29,16 +29,6 @@
       </a>
     </div>
   </li>
-  <li>
-    <div class="am-gallery-item">
-      <a href="{image}"
-      class="">
-        <img src="{image}"
-         />
-        <h3 class="am-gallery-title">保单照片</h3>
-      </a>
-    </div>
-  </li>
     <li>
     <div class="am-gallery-item">
       <a href="{jiaoqiang_image}"
@@ -94,7 +84,8 @@
   </li>
 </ul>
   {/records}
-
+<input type="file" capture="camera" accept="image/*" id="cameraInput" name="cameraInput">
+  
 </body>
 </html>
 
