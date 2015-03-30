@@ -43,14 +43,22 @@ class Admin extends CI_Controller {
 		$crud->display_as('last_maintenance_mile','上次保养公里数');
 		$crud->display_as('next_maintenance_mile','下次保养公里数');
 		$crud->display_as('last_maintenance_detail','上次保养明细');
-		$crud->display_as('jiashizheng_image','驾驶证');
-		$crud->display_as('xinshizheng_image','行驶证');
-		$crud->display_as('baodan_image','保单');
+		$crud->display_as('jiashi_image','驾驶证');
+		$crud->display_as('xingshi_image','行驶证');
+		$crud->display_as('ID_front_image','身份证正面');
+		$crud->display_as('ID_back_image','身份证反面');
+		$crud->display_as('bank_image','银行理赔卡');
+		$crud->display_as('jiaoqiangxian_image','交强险');
+		$crud->display_as('chesunxian_image','车损险');
 		$crud->display_as('type','类型');
 		
-		$crud->set_field_upload('jiashizheng_image','assets/uploads/files');
-		$crud->set_field_upload('xinshizheng_image','assets/uploads/files');
-		$crud->set_field_upload('baodan_image','assets/uploads/files');
+		$crud->set_field_upload('jiashi_image','assets/uploads/files');
+		$crud->set_field_upload('xingshi_image','assets/uploads/files');
+		$crud->set_field_upload('ID_front_image','assets/uploads/files');
+		$crud->set_field_upload('ID_back_image','assets/uploads/files');
+		$crud->set_field_upload('bank_image','assets/uploads/files');
+		$crud->set_field_upload('jiaoqiangxian_image','assets/uploads/files');
+		$crud->set_field_upload('chesunxian_image','assets/uploads/files');
 		
 		$crud->set_subject('用户');
 		$output = $crud->render();	

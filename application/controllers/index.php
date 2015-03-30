@@ -103,7 +103,7 @@ class index extends CI_Controller {
 				if(count($query->result_array())>0)
 				{
 					$this->session->set_userdata('userid', $query->result_array()[0]['id']);
-					redirect('profile');
+					redirect('index/profile');
 // 					$result = 'success';
 				}else{
 					redirect("index/login?weixinID={$output->openid}");
