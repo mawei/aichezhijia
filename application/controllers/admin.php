@@ -51,6 +51,15 @@ class Admin extends CI_Controller {
 		$crud->display_as('jiaoqiangxian_image','交强险');
 		$crud->display_as('chesunxian_image','车损险');
 		$crud->display_as('type','类型');
+		$crud->display_as('name','姓名');
+		$crud->display_as('wheel','轮胎');
+		$crud->display_as('last_baoxian_date','上次保险日期');
+		$crud->display_as('next_baoxian_date','保险到期日期');
+		$crud->display_as('last_baoyang_date','上次保养日期');
+		$crud->display_as('next_baoyang_date','下次保养日期');
+		$crud->display_as('chepai','车牌');
+		$crud->display_as('last_mile','上次保养公里数');
+		$crud->display_as('is_admin','是否为管理员');
 		
 		$crud->set_field_upload('jiashi_image','assets/uploads/files');
 		$crud->set_field_upload('xingshi_image','assets/uploads/files');
