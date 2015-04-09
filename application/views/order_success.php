@@ -6,7 +6,7 @@
 <body>
 {header}
 
-支付成功，点击查看订单
+<a href="<?=site_url('index/orderlist')?>">支付成功，点击查看订单</a>
   
 {footer}
 </body>

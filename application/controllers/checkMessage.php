@@ -37,7 +37,7 @@ class checkMessage extends CI_Controller
 		$post_data = array (
 				"touser" => $info['buyer_openid'],
 				"template_id" => "9DuC0s4n8iA2O7TAJSkZ6DX-U83UAup7P1dxW66SpzU",
-				"url" =>$this->feedback_url,
+				"url" => "http://www.qlqc.net.cn/aichezhijia/index.php?/index/orderlist",
 				"topcolor" => "#FF0000",
 				"data" => array(
 						"first"=>array("value" => "恭喜你，购买成功", "color"=>"#173177"),
@@ -228,9 +228,6 @@ class checkMessage extends CI_Controller
 	
 	public function saveMessage($openid,$message_id,$templete_id,$status)
 	{
-		//echo $openid;
-		//print_r($status);
-		
 		$message['openid'] = $openid;
 		$message['message_id'] = $message_id;
 		$message['template_id'] = $templete_id;
